@@ -1,0 +1,82 @@
+body{
+    margin: 80px;
+}
+
+main{
+    form{
+        .container-search{
+            position: relative;
+            .form-control{
+                background-color: rgb(243, 240, 240);
+                height: 50px;
+            }
+            img{
+               position: absolute;
+               right: 10px;
+               top: 15px;
+               height: 25px;
+            }
+        }
+        .container-elements{
+            position: relative;
+            margin-right: 20px;
+            .element{
+                height: 50px;
+                width: 150px;
+                color: white;
+                padding-left: 10px;
+                border-radius: 5px 5px 5px 5px;
+                &::placeholder{
+                    color: white;
+                    padding-left: 10px;
+                }
+            }
+            img{
+                position: absolute;
+                bottom: 10px;
+                height: 20px;
+                left: 120px;
+            }
+        }
+    }
+
+    section{
+        margin-top: 20px;
+        img{
+            width: 340px;
+            height: 180px;                                                                                                                              
+            object-fit: cover;
+        }
+        .text{
+            background-color: rgb(221, 233, 233);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            width: 340px;
+            height: auto;
+            .text-1{
+               display: flex;
+               justify-content: space-between;
+               .timer{
+                   font-weight: bold;
+               }
+            }
+            .text-2{
+               display: flex;
+               font-size: 12px;
+               font-weight: bold;
+               .ingredients{
+                   width: 50%;
+                   margin-right: 5px;
+               }
+               .infos{
+                   text-overflow: ellipsis;
+                   overflow: hidden;
+                   white-space: nowrap;
+                   width: 50%;
+                   margin-left: 5px;
+               }
+            }
+        }
+    }
+}

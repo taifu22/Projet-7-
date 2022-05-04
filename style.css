@@ -1,0 +1,86 @@
+body {
+  margin: 80px;
+}
+
+main form .container-search {
+  position: relative;
+}
+main form .container-search .form-control {
+  background-color: rgb(243, 240, 240);
+  height: 50px;
+}
+main form .container-search img {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  height: 25px;
+}
+main form .container-elements {
+  position: relative;
+  margin-right: 20px;
+}
+main form .container-elements .element {
+  height: 50px;
+  width: 150px;
+  color: white;
+  padding-left: 10px;
+  border-radius: 5px 5px 5px 5px;
+}
+main form .container-elements .element::-moz-placeholder {
+  color: white;
+  padding-left: 10px;
+}
+main form .container-elements .element:-ms-input-placeholder {
+  color: white;
+  padding-left: 10px;
+}
+main form .container-elements .element::placeholder {
+  color: white;
+  padding-left: 10px;
+}
+main form .container-elements img {
+  position: absolute;
+  bottom: 10px;
+  height: 20px;
+  left: 120px;
+}
+main section {
+  margin-top: 20px;
+}
+main section img {
+  width: 340px;
+  height: 180px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+main section .text {
+  background-color: rgb(221, 233, 233);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  height: auto;
+}
+main section .text .text-1 {
+  display: flex;
+  justify-content: space-between;
+}
+main section .text .text-1 .timer {
+  font-weight: bold;
+}
+main section .text .text-2 {
+  display: flex;
+  font-size: 12px;
+  font-weight: bold;
+}
+main section .text .text-2 .ingredients {
+  width: 50%;
+  margin-right: 5px;
+}
+main section .text .text-2 .infos {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 50%;
+  margin-left: 5px;
+}/*# sourceMappingURL=style.css.map */
