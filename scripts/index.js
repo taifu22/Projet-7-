@@ -1,8 +1,15 @@
- let recipes = null
+ //liste de variables à utiliser tout au long du code
+ let recipes = null;
  let recipe = null;
+ let check = null;
+ let arrayRecipes = []
+
  //fonction pour l'affichage de nos cards avec les recettes
  async function getRecipes() {
-     const section = document.querySelector('.section-articles');
+
+    //on récupere notre section principale du DOM pour afficher les cards
+     let section = document.querySelector('.section-articles');
+
     //on va faire un fetch pour la récuperation des informations des recettes dans le fichier JSON 
     await fetch('/data/recipes.json')
     .then(res => res.json())
@@ -16,6 +23,8 @@
         }).join('')
         recipe = document.createElement('article');
         recipe.setAttribute('class', 'col-lg-6 col-xl-4 mb-5')
+        //je donne l'attribut id = le nom de la recette pour pouvoir apres faire le filtre via le nom de la recette
+        recipe.setAttribute('id', `${el.name}`)
         recipe.innerHTML = `
        <img src="/assets/images/${el.name}.jpg" alt="">
        <div class="text">
@@ -38,9 +47,32 @@
                  </div>
            </div>
        </div>`
+       //je stocke toutes les recettes dans un tableau pour pouvoir l'utiliser aprés dans le filter de la barre de recherche
+       arrayRecipes.push(recipe)
        section.appendChild(recipe)
+    })
+
+    //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
+    const formControl = document.querySelector('.form-control').addEventListener("change", function(){
+        check = this.value;
+    })
+
+    //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer afficher juste les recettes
+    //dont le name est = à la value check de mon input
+    const formulaire = document.querySelector('.formulaire');
+    formulaire.addEventListener('submit', (e) => {
+        e.preventDefault()
+        console.log('envoie');
+        section.innerHTML = "";
+       //on filtre notre tableau pour afficher juste les cards qui nous interessent
+        arrayRecipes.filter(el => {
+            //je fais une condition pour trouver mes cards par rapport à une lettre ou une chaine de caracthere présente dans le nom de la recette
+            //que j'ai mis tout à l'heure dans le id de chaque recette
+            if (el.id.toLowerCase().indexOf(check) !== -1 ) {
+                section.appendChild(el)
+            }
+        })
     })
  }
 
- 
 getRecipes()
