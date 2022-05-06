@@ -2,7 +2,8 @@
  let recipes = null;
  let recipe = null;
  let check = null;
- let arrayRecipes = []
+ let arrayRecipes = [];
+ let arrayIngredients = [];
 
  //fonction pour l'affichage de nos cards avec les recettes
  async function getRecipes() {
@@ -19,8 +20,14 @@
     //on fait un map pour afficher toutes les cards 
     recipes.recipes.map(el => {
         let ingredients = el.ingredients.map(elt => {
+            //je stocke tous les ingredients dans un tableau, bien sur je fait attention de ne pas mettre des doublons
+            if (arrayIngredients.indexOf(elt.ingredient) === -1) {
+               return arrayIngredients.push(elt.ingredient)
+            }
             return `<p class="m-0"><b>${elt.ingredient}</b> ${elt.quantity ? ": "+elt.quantity : ''} ${elt.unit ? elt.unit : ''}</p>`
         }).join('')
+        
+        //je créé un article qui sera la card pour chaque recette
         recipe = document.createElement('article');
         recipe.setAttribute('class', 'col-lg-6 col-xl-4 mb-5')
         //je donne l'attribut id = le nom de la recette pour pouvoir apres faire le filtre via le nom de la recette
@@ -47,8 +54,11 @@
                  </div>
            </div>
        </div>`
+       
        //je stocke toutes les recettes dans un tableau pour pouvoir l'utiliser aprés dans le filter de la barre de recherche
        arrayRecipes.push(recipe)
+       
+       //j'affiche les cards avec les recette dans le DOM
        section.appendChild(recipe)
     })
 
@@ -73,6 +83,31 @@
             }
         })
     })
+
+    const mapIngredients = document.querySelector('.map-ingredients');
+    arrayIngredients.map(el => {
+        const pIngredient = document.createElement('li');
+        pIngredient.setAttribute('class', 'list-group text-light')
+        pIngredient.innerHTML = el
+        mapIngredients.appendChild(pIngredient);
+    })
+
+    //j'affiche la modale dans l'input du choix pour la recherche selon les ingredients
+    const chevronIngredients = document.querySelectorAll('.chevron-ingredients');
+    const containerElementsIngredient = document.querySelector('.container-elements-ingredient');
+    const containerElements2Ingredient = document.querySelector('.container-elements2-ingredient');
+    let chevronClick = true;
+    chevronIngredients.forEach(btn => btn.addEventListener('click', () => {
+        if (chevronClick) {
+            containerElementsIngredient.style.display = 'none';
+            containerElements2Ingredient.style.display = 'block';
+            chevronClick = false;   
+        } else {
+            containerElementsIngredient.style.display = 'block';
+            containerElements2Ingredient.style.display = 'none';
+            chevronClick = true;
+        }
+    }) )
  }
 
 getRecipes()

@@ -17,7 +17,7 @@ main{
                height: 25px;
             }
         }
-        .container-elements{
+        .container-elements-ingredient{
             position: relative;
             margin-right: 20px;
             .element{
@@ -31,11 +31,45 @@ main{
                     padding-left: 10px;
                 }
             }
-            img{
+            .chevron-ingredients{
                 position: absolute;
+                cursor: pointer;
                 bottom: 10px;
                 height: 20px;
                 left: 120px;
+            }
+        }
+        .container-elements2-ingredient {
+            position: relative;
+            margin-right: 20px;
+            display: none;
+            .element{
+                height: 50px;
+                width: 1300px;
+                color: white;
+                padding-left: 10px;
+                border-radius: 5px 5px 5px 5px;
+                &::placeholder{
+                    color: white;
+                    padding-left: 10px;
+                }
+            }
+            .chevron-ingredients{
+                position: absolute;
+                right: 20px;
+                top: 40px;
+                cursor: pointer;
+            }
+            .map-ingredients{
+                width: 1300px;
+                padding: 20px;
+                height: 750px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                color: black;
+                position: absolute;
             }
         }
     }

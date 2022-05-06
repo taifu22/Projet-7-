@@ -15,34 +15,76 @@ main form .container-search img {
   top: 15px;
   height: 25px;
 }
-main form .container-elements {
+main form .container-elements-ingredient {
   position: relative;
   margin-right: 20px;
 }
-main form .container-elements .element {
+main form .container-elements-ingredient .element {
   height: 50px;
   width: 150px;
   color: white;
   padding-left: 10px;
   border-radius: 5px 5px 5px 5px;
 }
-main form .container-elements .element::-moz-placeholder {
+main form .container-elements-ingredient .element::-moz-placeholder {
   color: white;
   padding-left: 10px;
 }
-main form .container-elements .element:-ms-input-placeholder {
+main form .container-elements-ingredient .element:-ms-input-placeholder {
   color: white;
   padding-left: 10px;
 }
-main form .container-elements .element::placeholder {
+main form .container-elements-ingredient .element::placeholder {
   color: white;
   padding-left: 10px;
 }
-main form .container-elements img {
+main form .container-elements-ingredient .chevron-ingredients {
   position: absolute;
+  cursor: pointer;
   bottom: 10px;
   height: 20px;
   left: 120px;
+}
+main form .container-elements2-ingredient {
+  position: relative;
+  margin-right: 20px;
+  display: none;
+}
+main form .container-elements2-ingredient .element {
+  height: 50px;
+  width: 1300px;
+  color: white;
+  padding-left: 10px;
+  border-radius: 5px 5px 5px 5px;
+}
+main form .container-elements2-ingredient .element::-moz-placeholder {
+  color: white;
+  padding-left: 10px;
+}
+main form .container-elements2-ingredient .element:-ms-input-placeholder {
+  color: white;
+  padding-left: 10px;
+}
+main form .container-elements2-ingredient .element::placeholder {
+  color: white;
+  padding-left: 10px;
+}
+main form .container-elements2-ingredient .chevron-ingredients {
+  position: absolute;
+  right: 20px;
+  top: 40px;
+  cursor: pointer;
+}
+main form .container-elements2-ingredient .map-ingredients {
+  width: 1300px;
+  padding: 20px;
+  height: 750px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  color: black;
+  position: absolute;
 }
 main section {
   margin-top: 20px;
