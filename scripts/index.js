@@ -5,7 +5,7 @@
  let checkInputIngredients = null
  let arrayRecipes = [];
  let arrayIngredients = [];
- let element2 =[];
+ let element2 = [];
  let element3 = [];
  let element4 = [];
  let elementSearc;
@@ -17,13 +17,13 @@
     //on récupere notre section principale du DOM pour afficher les cards
      let section = document.querySelector('.section-articles');
 
-    //on va faire un fetch pour la récuperation des informations des recettes dans le fichier JSON 
+//on va faire un fetch pour la récuperation des informations des recettes dans le fichier JSON 
     await fetch('/data/recipes.json')
     .then(res => res.json())
     .then(res => recipes = res)
     .catch(err => console.log("an error occurs", err));    
 
-    //on fait un map pour afficher toutes les cards 
+//on fait un map pour afficher toutes les cards dans la section
     recipes.recipes.map(el => {
         let ingredients = el.ingredients.map(elt => {
             return `<p class="m-0"><b>${elt.ingredient}</b> ${elt.quantity ? ": "+elt.quantity : ''} ${elt.unit ? elt.unit : ''}</p>`
@@ -72,6 +72,41 @@
        })
     })
 
+//MENU RECHERCHE TITRE RECETTE
+    //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
+    const formControl = document.querySelector('.form-control').addEventListener("change", function(){
+        check = this.value;
+    })
+
+    //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer/afficher juste les recettes
+    //dont le name est = à la value check de mon input
+    const formulaire = document.querySelector('.formulaire');
+    formulaire.addEventListener('submit', (e) => {
+        e.preventDefault()
+        section.innerHTML = "";
+       //on filtre notre tableau pour afficher juste les cards qui nous interessent
+        arrayRecipes.filter(el => {
+            //je fais une condition pour trouver mes cards par rapport à une lettre ou une chaine de caracthere présente dans le nom de la recette
+            //que j'ai mis tout à l'heure dans le id de chaque recette
+            if (el.id.toLowerCase().indexOf(check) !== -1 ) {
+                section.appendChild(el)
+            }
+        })
+    })
+
+//MENU RECHERCHE INGREDIENTS
+    //on récupere l'élément pour afficher la liste des ingredients avec le map
+    const mapIngredients = document.querySelector('.map-ingredients');
+    let arrayIngredients2 = [];
+    let pIngredient = null
+    //on map notre array avec la liste de tous les ingredients, et on l'affiche dans la liste des ingredients
+    arrayIngredients.map(el => {
+        pIngredient = document.createElement('li');
+        pIngredient.setAttribute('class', 'li-ingredient list-group')
+        pIngredient.innerHTML = el
+        arrayIngredients2.push(pIngredient)
+        mapIngredients.appendChild(pIngredient); 
+    })
     //j'affiche la modale dans l'input du choix pour la recherche selon les ingredients
     const chevronIngredients = document.querySelectorAll('.chevron-ingredients');
     const containerElementsIngredient = document.querySelector('.container-elements-ingredient');
@@ -87,51 +122,7 @@
             containerElements2Ingredient.style.display = 'none';
             chevronClick = true;
         }
-    }) )
-
-    //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
-    const formControl = document.querySelector('.form-control').addEventListener("change", function(){
-        check = this.value;
-    })
-
-    //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer afficher juste les recettes
-    //dont le name est = à la value check de mon input
-    const formulaire = document.querySelector('.formulaire');
-    formulaire.addEventListener('submit', (e) => {
-        e.preventDefault()
-        console.log('envoie');
-        section.innerHTML = "";
-       //on filtre notre tableau pour afficher juste les cards qui nous interessent
-        arrayRecipes.filter(el => {
-            //je fais une condition pour trouver mes cards par rapport à une lettre ou une chaine de caracthere présente dans le nom de la recette
-            //que j'ai mis tout à l'heure dans le id de chaque recette
-            if (el.id.toLowerCase().indexOf(check) !== -1 ) {
-                section.appendChild(el)
-            }
-        })
-    })
-
-    //on récupere l'élément pour afficher la liste des ingredients avec le map
-    const mapIngredients = document.querySelector('.map-ingredients');
-    let arrayIngredients2 = [];
-    // if (element4 != []) {
-    //     element4.map(el => {
-    //         const pIngredient = document.createElement('li');
-    //         pIngredient.setAttribute('class', 'li-ingredient list-group')
-    //         pIngredient.innerHTML = el
-    //         arrayIngredients2.push(pIngredient)
-    //         mapIngredients.appendChild(pIngredient); 
-       // })
-   // } else {
-        console.log('ciao');
-        arrayIngredients.map(el => {
-            const pIngredient = document.createElement('li');
-            pIngredient.setAttribute('class', 'li-ingredient list-group')
-            pIngredient.innerHTML = el
-            arrayIngredients2.push(pIngredient)
-            mapIngredients.appendChild(pIngredient); 
-        })
-    //}
+    }))
     
     //on filtre notre menu ingredient selon la value de l'input
     document.querySelector('.input-ingredients').addEventListener("input", function(){
@@ -151,19 +142,17 @@
         el.ingredients.push({name:el.name})
         let element = el.ingredients.map(el => {
             if (el.name) {
-                return el.name
+                return [el.name]
             } else {
                 return el.ingredient
             }
         })
         arraySearchIngredient.push(element)
     })
-
+//console.log(arraySearchIngredient);
     //j'affiche mon tag de li-ingredient choisi dans la liste des ingredients
-    let checkNewElementSearch = false;
     const liIngredient = document.querySelectorAll('.li-ingredient');
     liIngredient.forEach(btn => btn.addEventListener('click', (e) => {
-        checkNewElementSearch = true
         elementSearc = document.querySelector('.elemnts-search');
         newelementSearc = document.createElement('div');
         newelementSearc.innerHTML = `<p style="margin:5px;">${e.currentTarget.textContent}</p><img class="close" style="margin:5px;" src="/assets/close.svg" alt="close">`;
@@ -173,38 +162,64 @@
         //je vide ma section pour trier aprés selon l'ingrédient de mon tag
         section.innerHTML = ""
         //je trie mon tableau avec les ingredients et le nom de chaque recette , et je laisse juste les recettes avec l'ingrédient choisi
-        arraySearchIngredient.map(el => {
-            if (el.indexOf(e.currentTarget.textContent) !== -1) {
-                return element2.push(el)
-            }
-        })
-        //je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné, et je supprime ce titre du tableau
+        if (Array.isArray(element2) && element2.length) {
+            //console.log('element2');
+            element2.map(el => {
+                if (el.includes(e.currentTarget.textContent) == false) {
+                    for(var i = el.length-1 ; i >=0 ; i--){
+                        if (el[i] !== e.currentTarget.textContent) {
+                            el.splice(i,1);
+                        }
+                    }
+                }
+            })
+        } else {
+            //console.log('arraySearchIngredient');
+            arraySearchIngredient.map(el => {
+                if (el.indexOf(e.currentTarget.textContent) !== -1) {
+                    return element2.push(el)
+                }
+            })
+        }
+        //je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
+        //bien sur à chaque tag choisi le tableau doit etre reinitialisé
+        element3 = [];
         element2.map(el => {
+            //console.log(el);
             element3.push(el[el.length -1])
-            return el.pop()
+            //return el.pop()
         })
         //je stccke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient
+        //bien sur je reinitialise le tableau d'avant
+        element4 = []
         element2.map(el => {
             el.map(elt => element4.push(elt))
         })
-        //j'affiche dans ma section du coup juste les recettes de l'ingrédient dont on a créé le tage
+        //j'affiche ma liste des ingredients avec ceux restants en ayant choisi l'ingredinet d'avant
+         mapIngredients.innerHTML = ""
+        //arrayIngredients2 = []
+        element4.map(el => {
+            arrayIngredients2.map(elt => {
+                if (elt.textContent === el) {
+                    mapIngredients.appendChild(elt);
+                }
+            })
+        })
+        //console.log(arraySearchIngredient );
+        console.log(element2);
+        console.log(element3);
+        //console.log(element4);
+        //j'affiche dans ma section du coup juste les recettes de l'ingrédient dont on a créé le tag
         arrayRecipes.map(el => {
-            if (element3.indexOf(el.id) !== -1) {
-                section.appendChild(el)
-            }
+            element3.map(elt => {
+                if (elt !== undefined) {
+                    if (elt.indexOf(el.id) !== -1) {
+                        section.appendChild(el)
+                    }   
+                }
+            })
         })
     }))
-
-    //evenement pour supprimer les tags ingredients
-    let closeIngredients = document.querySelectorAll('.close');
-    if (checkNewElementSearch) {
-        console.log('ciao');
-        closeIngredients.forEach(btn => {btn.addEventListener('click', () => {
-            newelementSearc.remove()
-            checkNewElementSearch = false
-        })   })
-    }
-
  }
 
 getRecipes()
