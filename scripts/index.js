@@ -11,19 +11,18 @@
  let elementSearc;
  let newelementSearc;
 
- //fonction pour l'affichage de nos cards avec les recettes
- async function getRecipes() {
-
+//FONCTION PRINCIPALE POUR L'AFFICHAGE ET LES RECHERCHES DES RECETTES
+async function getRecipes() {
     //on récupere notre section principale du DOM pour afficher les cards
-     let section = document.querySelector('.section-articles');
+    let section = document.querySelector('.section-articles');
 
-//on va faire un fetch pour la récuperation des informations des recettes dans le fichier JSON 
+    //on va faire un fetch pour la récuperation des informations des recettes dans le fichier JSON 
     await fetch('/data/recipes.json')
     .then(res => res.json())
     .then(res => recipes = res)
     .catch(err => console.log("an error occurs", err));    
 
-//on fait un map pour afficher toutes les cards dans la section
+//ON FAIT UN MAP POUR AFFICHER TOUTES LES CARDS DANS LA SECTION DES RECETTES
     recipes.recipes.map(el => {
         let ingredients = el.ingredients.map(elt => {
             return `<p class="m-0"><b>${elt.ingredient}</b> ${elt.quantity ? ": "+elt.quantity : ''} ${elt.unit ? elt.unit : ''}</p>`
@@ -135,7 +134,7 @@
         })
     });
 
-    //je stocke les ingredients et le name de chaque recette dans un array, donc j'aurais 50 objets dans un array
+    //je stocke les ingredients et le name(dans un array) de chaque recette dans un array, donc j'aurais 50 arrays (recettes) dans un array
     let arraySearchIngredient = []
     
     recipes.recipes.map(el => {
@@ -149,21 +148,21 @@
         })
         arraySearchIngredient.push(element)
     })
-//console.log(arraySearchIngredient);
-    //j'affiche mon tag de li-ingredient choisi dans la liste des ingredients
+    
+    //j'affiche mon tag de li-ingredient choisi depuis la liste des ingredients
     const liIngredient = document.querySelectorAll('.li-ingredient');
     liIngredient.forEach(btn => btn.addEventListener('click', (e) => {
-        elementSearc = document.querySelector('.elemnts-search');
+        elementSearc = document.querySelector('.elements-search');
         newelementSearc = document.createElement('div');
-        newelementSearc.innerHTML = `<p style="margin:5px;">${e.currentTarget.textContent}</p><img class="close" style="margin:5px;" src="/assets/close.svg" alt="close">`;
-        newelementSearc.setAttribute('class', 'bg-primary d-flex m-3 rounded');
+        newelementSearc.innerHTML = `<p style="margin:5px;">${e.currentTarget.textContent}</p><img id="close1" style="margin:5px; cursor:pointer;" src="/assets/close.svg" alt="close">`;
+        newelementSearc.setAttribute('class', 'bg-primary d-flex m-3 rounded elem-tag');
+        newelementSearc.setAttribute('id', `${e.currentTarget.textContent}`)
         newelementSearc.setAttribute('style', 'color:white;')
         elementSearc.appendChild(newelementSearc);
         //je vide ma section pour trier aprés selon l'ingrédient de mon tag
         section.innerHTML = ""
         //je trie mon tableau avec les ingredients et le nom de chaque recette , et je laisse juste les recettes avec l'ingrédient choisi
         if (Array.isArray(element2) && element2.length) {
-            //console.log('element2');
             element2.map(el => {
                 if (el.includes(e.currentTarget.textContent) == false) {
                     for(var i = el.length-1 ; i >=0 ; i--){
@@ -174,7 +173,6 @@
                 }
             })
         } else {
-            //console.log('arraySearchIngredient');
             arraySearchIngredient.map(el => {
                 if (el.indexOf(e.currentTarget.textContent) !== -1) {
                     return element2.push(el)
@@ -185,19 +183,16 @@
         //bien sur à chaque tag choisi le tableau doit etre reinitialisé
         element3 = [];
         element2.map(el => {
-            //console.log(el);
             element3.push(el[el.length -1])
-            //return el.pop()
         })
-        //je stccke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient
+        //je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient
         //bien sur je reinitialise le tableau d'avant
         element4 = []
         element2.map(el => {
-            el.map(elt => element4.push(elt))
+            el.map(elt => element4.push(elt));
         })
-        //j'affiche ma liste des ingredients avec ceux restants en ayant choisi l'ingredinet d'avant
-         mapIngredients.innerHTML = ""
-        //arrayIngredients2 = []
+        //j'affiche ma liste des ingredients avec ceux restants, en ayant choisi l'ingredinet d'avant
+        mapIngredients.innerHTML = "";
         element4.map(el => {
             arrayIngredients2.map(elt => {
                 if (elt.textContent === el) {
@@ -205,10 +200,6 @@
                 }
             })
         })
-        //console.log(arraySearchIngredient );
-        console.log(element2);
-        console.log(element3);
-        //console.log(element4);
         //j'affiche dans ma section du coup juste les recettes de l'ingrédient dont on a créé le tag
         arrayRecipes.map(el => {
             element3.map(elt => {
@@ -219,7 +210,23 @@
                 }
             })
         })
-    }))
- }
+        //console.log(element2);
+        //console.log(element3);
+        //console.log(element4);
+        //je fait disparaitre la liste des ingredients une fois le traitement de triage des recettes terminé
+        containerElementsIngredient.style.display = 'block';
+        containerElements2Ingredient.style.display = 'none';
+        chevronClick = true;
+        
+//JE SUPPRIME UN TAG TOUT EN LAISSANT MA SECTION TRIEE SELON LES TAGS RESTANTS    
+        function closeTags() {
+            let elemtag = document.querySelector('.elem-tag');
+            console.log(elemtag);
+            elemtag.setAttribute('class','d-none');
+        }
+        let close1 = document.querySelectorAll('#close1');
+        close1.forEach(btn => btn.addEventListener('click', closeTags)) 
+    }))  
+}
 
 getRecipes()
