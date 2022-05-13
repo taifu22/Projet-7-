@@ -160,11 +160,10 @@ async function getRecipes() {
         elementSearc.appendChild(newelementSearc);
         //je vide ma section pour trier aprés selon l'ingrédient de mon tag
         section.innerHTML = ""
-        //
-        arraySearchIngredient2 = arraySearchIngredient;
         /*si j'ai deja choisi un tag, donc mon element2 n'est pas vide, je trie mon tableau avec les ingredients et le nom de chaque recette , et je 
         laisse juste les recettes avec l'ingrédient choisi*/
         if (Array.isArray(element2) && element2.length) {
+            //console.log(element2);
             element2.filter(el => {
                 if (el.indexOf(e.currentTarget.textContent) === -1 ) {
                     for(var i = el.length-1 ; i >=0 ; i--){
@@ -232,6 +231,8 @@ async function getRecipes() {
         containerElements2Ingredient.style.display = 'none';
         chevronClick = true;
         
+        //console.log(element2);
+
     //JE SUPPRIME UN TAG TOUT EN LAISSANT MA SECTION TRIEE SELON LES TAGS RESTANTS    
         /*je recupere l'element close pour fermer un tag, du coup je recupere tous les close que je stocke dans un array, et je donne à chaque element de l'array
         un event click, puis je dit si lid de lelement close est === au textContent de mon elemtag alors tu me supprime le tag et tu me filtre ma section de
@@ -248,56 +249,79 @@ async function getRecipes() {
                             if (index > -1) {
                                 searchingCriterias.splice(index, 1);
                             }
-                            let value = searchingCriterias.join(' ');
+                            let value = searchingCriterias.join(' ')
                             /*on récupere les recettes donc avec tous les autres ingredients par rapport au tag supprimé, par exemple si je supprime le tag
                             'lait de coco', alors j'aurais tous les ingredients qui n'ont pas 'lait de coco', et bien sur les recettes avec 'lait de coco' aussi 
                             seront affichés*/
-                            foundIngredients = recipes.recipes.filter(item => 
-                                item.ingredients.find(el => {
-                                    if (el.ingredient !== undefined) {
-                                        return el.ingredient.toLowerCase().includes(value.toLowerCase())
+                            /*je stocke les ingredients et le name(dans un array) de chaque recette dans un array, donc j'aurais 50 arrays (recettes) dans un array,
+                            mais avant je pense bien à reinitialiser ce tableau car sinon à chaque fois que le else se lance, mon tableau ajoute des doublons*/
+                            arraySearchIngredient =[];
+                            recipes.recipes.map(el => {
+                                el.ingredients.push({name:el.name})
+                                let element = el.ingredients.map(el => {
+                                    if (el.name) {
+                                        return [el.name]
+                                    } else {
+                                        return el.ingredient
                                     }
                                 })
-                            );
-                            arrayIngredientsTags = [];
-                            foundIngredients.map(el => 
-                                el.ingredients.map(elt => {
-                                    if (elt.ingredient !== undefined ) {
-                                        if (arrayIngredientsTags.indexOf(elt.ingredient) === -1) {
-                                            return arrayIngredientsTags.push(elt.ingredient)
-                                        }
-                                    }
-                                })
-                            )
-                            //affichage de la liste des ingredients dans le menu ingredient en ayant supprimé un tag
+                                arraySearchIngredient.push(element)
+                            })
+                            /*donc ici je push dans mon element2 juste les recettes lié au tag*/ 
+                            arraySearchIngredient.map(el => {
+                                if (el.indexOf(value) !== -1) {
+                                    return element2.push(el)
+                                }
+                            })
+                            console.log(element2);
+                            /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
+                            bien sur à chaque tag choisi le tableau doit etre reinitialisé*/
+                            element3 = [];
+                            element2.map(el => {
+                                element3.push(el[el.length -1])
+                            })
+                            /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient
+                            bien sur je reinitialise le tableau d'avant*/
+                            element4 = []
+                            element2.map(el => {
+                                el.map(elt => element4.push(elt));
+                            })
+                            //j'affiche ma liste des ingredients avec ceux restants, en ayant choisi l'ingredinet d'avant
                             mapIngredients.innerHTML = "";
-                            arrayIngredientsTags.map(el => {
+                            element4.map(el => {
                                 arrayIngredients2.map(elt => {
                                     if (elt.textContent === el) {
                                         mapIngredients.appendChild(elt);
                                     }
                                 })
                             })
-                            //affichage des recettes selon le tag ingredient supprimé
+                            //j'affiche dans ma section du coup juste les recettes de l'ingrédient dont on a créé le tag
                             section.innerHTML = "";
                             arrayRecipes.map(el => {
-                                foundIngredients.map(elt => {
-                                    if (elt.name !== undefined) {
-                                          if(elt.name === el.id){  
+                                element3.map(elt => {
+                                    if (elt !== undefined) {
+                                        if (elt.indexOf(el.id) !== -1) {
                                             section.appendChild(el)
                                         }   
                                     }
                                 })
                             })
-                            /*si mon searchingcriterias est vide, donc plus de tag à supprimer je vide mes tableaux pour recommencer à nouveau à 
-                            choisir des tags*/
-                            if (searchingCriterias.length <= 0) {
-                                element2 = [];
-                                element3 = [];
-                                element4 = [];
-                            }
                         }
                     })
+                    if (searchingCriterias.length <= 0) {
+                        mapIngredients.innerHTML = "";
+                        section.innerHTML = "";
+                        arrayRecipes.map(el => {
+                            section.appendChild(el)
+                        })
+                        arrayIngredients2.map(elt => {
+                            mapIngredients.appendChild(elt);
+                        })
+                        element2 = [];
+                        element3 = [];
+                        element4 = [];
+                    }
+                    //console.log(element2);
                 }) 
             })
     }))  
