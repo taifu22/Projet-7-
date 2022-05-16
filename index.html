@@ -25,7 +25,8 @@
         <div class="elements-search d-flex">
         </div>
           <div class="d-flex">
-            <form>
+            <form class="d-flex">
+                <!--INGREDIENTS-->
             <div class="container-elements-ingredient container-ingredients-none">
                 <button type="button" class="bg-primary element border-0 mt-4">
                     <p>Ingredients</p>
@@ -33,15 +34,41 @@
                 </button>
             </div>
             <div class="container-elements2-ingredient container-ingredients w-auto h-auto">
-                <input type="text" placeholder="Rechercher un ingrédient" class="bg-primary element border-0 mt-4 input-ingredients">
-                <img class="chevron-ingredients" src="/assets/chevron white.png" alt="chevron">
+                <div>
+                   <input type="text" placeholder="Rechercher un ingrédient" class="bg-primary element border-0 mt-4 input-ingredients">
+                   <img class="chevron-ingredients" src="/assets/chevron white.png" alt="chevron">
+                </div>
                 <ul class="map-ingredients bg-primary list-group-item p-2 text-light col-12 show"></ul>
             </div>
-            <!-- <div class="container-elements">
-                <input type="text" placeholder="Appareils" class="bg-info element border-0 mt-4">
-                <img src="/assets/chevron.svg" alt="chevron">
+            <!-- APPAREILS -->
+            <div class="container-elements-appareils container-appareils-none">
+                <button type="button" class="bg-info element border-0 mt-4">
+                    <p>Appareils</p>
+                    <img class="chevron-appareils" src="/assets/chevron.svg" alt="chevron">
+                </button>
             </div>
-            <div class="container-elements">
+            <div class="container-elements2-appareils container-appareils w-auto h-auto">
+                <div>
+                   <input type="text" placeholder="Rechercher un appareil" class="bg-info element border-0 mt-4 input-appareils">
+                   <img class="chevron-appareils" src="/assets/chevron white.png" alt="chevron">
+                </div>
+                <ul class="map-appareils bg-info list-group-item p-2 text-light col-12 show"></ul>
+            </div>
+            <!-- USTENSILS -->
+            <div class="container-elements-ustensils container-ustensils-none">
+                <button type="button" class="bg-danger element border-0 mt-4">
+                    <p>Ustensiles</p>
+                    <img class="chevron-ustensils" src="/assets/chevron.svg" alt="chevron">
+                </button>
+            </div>
+            <div class="container-elements2-ustensils container-ustensils w-auto h-auto">
+                <div>
+                   <input type="text" placeholder="Rechercher un utensil" class="bg-danger element border-0 mt-4 input-ustensils">
+                   <img class="chevron-ustensils" src="/assets/chevron white.png" alt="chevron">
+                </div>
+                <ul class="map-ustensils bg-danger list-group-item p-2 text-light col-12 show"></ul>
+            </div>
+            <!--<div class="container-elements">
                 <input type="text" placeholder="Ustensiles" class="bg-danger element border-0 mt-4">
                 <img src="/assets/chevron.svg" alt="chevron">
             </div> -->

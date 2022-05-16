@@ -1,21 +1,26 @@
  //liste de variables à utiliser tout au long du code
- let recipes = null;
- let recipe = null;
- let check = null;
- let checkInputIngredients = null
- let arrayRecipes = [];
- let arrayIngredients = [];
- let element2 = [];
- let element3 = [];
- let element4 = [];
- let arrayIngredientsTags = [];
- let searchingCriterias = [];
- let elementSearc;
- let newelementSearc;
- let foundIngredients;
- let liIngredient;
- let close1;
- let arraySearchIngredient = [];
+let recipes = null;
+let recipe = null;
+let check = null;
+let checkInputIngredients = null;
+let checkInputAppareils = null;
+let checkInputUstensils = null;
+let arrayRecipes = [];
+let arrayIngredients = []; arrayIngredients.push([]); arrayIngredients.push([]); arrayIngredients.push([]);
+let arrayIngredients2 = []; arrayIngredients2.push([]); arrayIngredients2.push([]); arrayIngredients2.push([]); 
+let element2 = [];
+let element3 = [];
+let element4ingredients = [];
+let element4appliances = [];
+let element4ustensils = [];
+let arrayIngredientsTags = [];
+let searchingCriterias = [];
+let elementSearc;
+let newelementSearc;
+let foundIngredients;
+let liIngredient;
+let close1;
+let arraySearchIngredient = [];
 
 //FONCTION PRINCIPALE POUR L'AFFICHAGE ET LES RECHERCHES DES RECETTES
 async function getRecipes() {
@@ -29,7 +34,7 @@ async function getRecipes() {
     .catch(err => console.log("an error occurs", err));    
 
 //ON FAIT UN MAP POUR AFFICHER TOUTES LES CARDS DANS LA SECTION DES RECETTES
-    recipes.recipes.map(el => {
+    recipes.recipes.map(el => { 
         let ingredients = el.ingredients.map(elt => {
             return `<p class="m-0"><b>${elt.ingredient}</b> ${elt.quantity ? ": "+elt.quantity : ''} ${elt.unit ? elt.unit : ''}</p>`
         }).join('')
@@ -71,10 +76,20 @@ async function getRecipes() {
 
        //je stocke tous les ingredients dans un tableau, bien sur je fait attention de ne pas mettre des doublons
        el.ingredients.map(elt => {
-        if (arrayIngredients.indexOf(elt.ingredient) === -1) {
-            return arrayIngredients.push(elt.ingredient)
-        }
+           if (arrayIngredients[0].indexOf(elt.ingredient) === -1) {
+               return arrayIngredients[0].push(elt.ingredient)
+           }
        })
+       //je stocke tous les appareils dans un tableau, bien sur je fait attention de ne pas mettre des doublons
+        if (arrayIngredients[1].indexOf(el.appliance) === -1) {
+            return arrayIngredients[1].push(el.appliance)
+        }
+        //je stocke tous les utensiles dans un tableau, bien sur je fait attention de ne pas mettre des doublons
+        el.ustensils.map(elt => {
+            if (arrayIngredients[2].indexOf(elt) === -1) {
+                return arrayIngredients[2].push(elt)
+            }
+        })
        //je clone ce tableau car j'en aurait besoin pour la suppression des tags
        arrayIngredientsTags = [...arrayIngredients];
     })
@@ -101,23 +116,24 @@ async function getRecipes() {
         })
     })
 
-//MENU RECHERCHE INGREDIENTS
+//MENU RECHERCHE INGREDIENTS - APPAREILS - UTENSILES
+    //AfFFICHAGE INGREDIENTS
     //on récupere l'élément pour afficher la liste des ingredients avec le map
     const mapIngredients = document.querySelector('.map-ingredients');
-    let arrayIngredients2 = [];
     let pIngredient = null
     //on map notre array avec la liste de tous les ingredients, et on l'affiche dans la liste des ingredients
-    arrayIngredients.map(el => {
+    arrayIngredients[0].map(el => {
         pIngredient = document.createElement('li');
         pIngredient.setAttribute('class', 'li-ingredient list-group')
+        pIngredient.setAttribute('id', 'ingredients');
         pIngredient.innerHTML = el
-        arrayIngredients2.push(pIngredient)
+        arrayIngredients2[0].push(pIngredient)
         mapIngredients.appendChild(pIngredient); 
     })
     //j'affiche la modale dans l'input du choix pour la recherche selon les ingredients
     const chevronIngredients = document.querySelectorAll('.chevron-ingredients');
-    const containerElementsIngredient = document.querySelector('.container-elements-ingredient');
-    const containerElements2Ingredient = document.querySelector('.container-elements2-ingredient');
+    let containerElementsIngredient = document.querySelector('.container-elements-ingredient');
+    let containerElements2Ingredient = document.querySelector('.container-elements2-ingredient');
     let chevronClick = true;
     chevronIngredients.forEach(btn => btn.addEventListener('click', () => {
         if (chevronClick) {
@@ -130,31 +146,119 @@ async function getRecipes() {
             chevronClick = true;
         }
     }))
-    
     //on filtre notre menu ingredient selon la value de l'input
     document.querySelector('.input-ingredients').addEventListener("input", function(){
         checkInputIngredients = this.value;
         mapIngredients.innerHTML = "";;
-        arrayIngredients2.filter(el => {
+        arrayIngredients2[0].filter(el => {
            if (el.textContent.toLowerCase().indexOf(checkInputIngredients) !== -1) {
             mapIngredients.appendChild(el)
            }
         })
     });
 
-    /*je créé un deuxieme arraySearchIngredients à utiliser quand je clique et je choisi un ingredient, pour ne pas perdre les ingredient
-    qunad on fera un map de element2 dans notre forEach de liIngredient*/
-    arraySearchIngredient2 = [...arraySearchIngredient];
+    //AfFFICHAGE APPAREILS
+    //on récupere l'élément pour afficher la liste des ingredients avec le map
+    const mapAppareils = document.querySelector('.map-appareils');
+    let pAppareils = null
+    //on map notre array avec la liste de tous les ingredients, et on l'affiche dans la liste des ingredients
+    arrayIngredients[1].map(el => {
+        pAppareils = document.createElement('li');
+        pAppareils.setAttribute('class', 'li-ingredient list-group')
+        pAppareils.setAttribute('id', 'appareils');
+        pAppareils.innerHTML = el
+        arrayIngredients2[1].push(pAppareils)
+        mapAppareils.appendChild(pAppareils); 
+    })
+    //j'affiche la modale dans l'input du choix pour la recherche selon les ingredients
+    const chevronAppareils = document.querySelectorAll('.chevron-appareils');
+    let containerElementsAppareils = document.querySelector('.container-elements-appareils');
+    let containerElements2Appareils = document.querySelector('.container-elements2-appareils');
+    let chevronClickAppareils = true;
+    chevronAppareils.forEach(btn => btn.addEventListener('click', () => {
+        if (chevronClickAppareils) {
+            containerElementsAppareils.style.display = 'none';
+            containerElements2Appareils.style.display = 'block';
+            chevronClickAppareils = false;   
+        } else {
+            containerElementsAppareils.style.display = 'block';
+            containerElements2Appareils.style.display = 'none';
+            chevronClickAppareils = true;
+        }
+    }))
+    
+    //on filtre notre menu ingredient selon la value de l'input
+    document.querySelector('.input-appareils').addEventListener("input", function(){
+        checkInputAppareils = this.value;
+        mapAppareils.innerHTML = "";;
+        arrayIngredients2[1].filter(el => {
+           if (el.textContent.toLowerCase().indexOf(checkInputAppareils) !== -1) {
+            mapAppareils.appendChild(el)
+           }
+        })
+    });
 
+    //AfFFICHAGE USTENSILS
+    //on récupere l'élément pour afficher la liste des ingredients avec le map
+    const mapUstensils = document.querySelector('.map-ustensils'); 
+    let pUstensil = null
+    //on map notre array avec la liste de tous les ingredients, et on l'affiche dans la liste des ingredients
+    arrayIngredients[2].map(el => {
+        pUstensil = document.createElement('li');
+        pUstensil.setAttribute('class', 'li-ingredient list-group')
+        pUstensil.setAttribute('id', 'ustensils');
+        pUstensil.innerHTML = el
+        arrayIngredients2[2].push(pUstensil)
+        mapUstensils.appendChild(pUstensil); 
+    })
+    //j'affiche la modale dans l'input du choix pour la recherche selon les ingredients
+    const chevronUstensils = document.querySelectorAll('.chevron-ustensils');
+    let containerElementsUstensils = document.querySelector('.container-elements-ustensils');
+    let containerElements2Ustensils = document.querySelector('.container-elements2-ustensils');
+    let chevronClickUstensils = true;
+    chevronUstensils.forEach(btn => btn.addEventListener('click', () => {
+        if (chevronClickUstensils) {
+            containerElementsUstensils.style.display = 'none';
+            containerElements2Ustensils.style.display = 'block';
+            chevronClickUstensils = false;   
+        } else {
+            containerElementsUstensils.style.display = 'block';
+            containerElements2Ustensils.style.display = 'none';
+            chevronClickUstensils = true;
+        }
+    }))
+  
+    //on filtre notre menu appareils selon la value de l'input
+    document.querySelector('.input-ustensils').addEventListener("input", function(){
+        checkInputUstensils = this.value;
+        mapUstensils.innerHTML = "";;
+        arrayIngredients2[2].filter(el => {
+           if (el.textContent.toLowerCase().indexOf(checkInputUstensils) !== -1) {
+            mapUstensils.appendChild(el)
+           }
+        })
+    });
+
+/*EVENEMENT POUR CHOISIR UN TAG, ET L'AFFICHER DANS MA LISTE DES TAGS CHOISI
+DANS CET EVENEMTN DU COUP IL Y AURA AUSSI LE FILTRAGE DES TABLEAUX POUR AFFICHER LES BONS INGREDIENTS, USTENSILS, ET APPAREILS, EN SUIVANT LE TAG CHOISI*/       
     //j'affiche mon tag de li-ingredient choisi depuis la liste des ingredients
     liIngredient = document.querySelectorAll('.li-ingredient');
     liIngredient.forEach(btn => btn.addEventListener('click', (e) => {
+        //je stocke mon tag dans un tableau pour l'utiliser aprés au nievau de la suppression du tag
         const searchingCriteria = e.currentTarget.textContent;
         searchingCriterias.push(searchingCriteria);
+        //on créé notre element tag
         elementSearc = document.querySelector('.elements-search');
         newelementSearc = document.createElement('div');
         newelementSearc.innerHTML = `<p style="margin:5px;">${e.currentTarget.textContent}</p><img class="close1" id="${e.currentTarget.textContent}" style="margin:5px; cursor:pointer;" src="/assets/close.svg" alt="close">`;
-        newelementSearc.setAttribute('class', 'bg-primary d-flex m-3 rounded elem-tag');
+        //petite condition pour afficher la bonne coulaur selon le tag choisi (entre ingredients, appareils et ustensils)
+        if (e.path[0].id === 'appareils') {
+            newelementSearc.setAttribute('class', 'bg-info d-flex m-3 rounded elem-tag');   
+        } else if (e.path[0].id === 'ingredients') {
+            newelementSearc.setAttribute('class', 'bg-primary d-flex m-3 rounded elem-tag');   
+        } else if (e.path[0].id === 'ustensils') {
+            newelementSearc.setAttribute('class', 'bg-danger d-flex m-3 rounded elem-tag');   
+        }
         newelementSearc.setAttribute('id', `${e.currentTarget.textContent}`)
         newelementSearc.setAttribute('style', 'color:white;')
         elementSearc.appendChild(newelementSearc);
@@ -179,43 +283,99 @@ async function getRecipes() {
             arraySearchIngredient =[];
             recipes.recipes.map(el => {
                 el.ingredients.push({name:el.name})
-                let element = el.ingredients.map(el => {
+                let ingredient = el.ingredients.map(el => {
                     if (el.name) {
                         return [el.name]
                     } else {
                         return el.ingredient
                     }
                 })
-                arraySearchIngredient.push(element)
+                let appliance = el.appliance
+                let ustensils = el.ustensils.map(el => {
+                    return el
+                })
+                ingredient.unshift(appliance)
+                ingredient.unshift(ustensils)
+                arraySearchIngredient.push(ingredient)
             })
-            /*donc ici je push dans mon element2 juste les recettes lié au tag*/ 
+
+            /*donc ici je push dans mon element2 juste les recettes lié au tag, que ce soit ingredient, appareil ou stensil*/ 
             arraySearchIngredient.map(el => {
                 if (el.indexOf(e.currentTarget.textContent) !== -1) {
+                    return element2.push(el)
+                } else if (el[0].indexOf(e.currentTarget.textContent) !== -1) {
                     return element2.push(el)
                 }
             })
         }
+        //console.log(element2);
         //je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
         //bien sur à chaque tag choisi le tableau doit etre reinitialisé
-        element3 = [];
+            element3 = [];
+            element2.map(el => {
+                element3.push(el[el.length -1])
+            })   
+
+        /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient ou apareil
+        bien sur je reinitialise le tableau d'avant*/
+        element4ingredients = []
         element2.map(el => {
-            element3.push(el[el.length -1])
+            el.map(elt => {
+                if (elt !== el[0]) {
+                    element4ingredients.push(elt)   
+                }
+            });   
         })
-        //je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient
-        //bien sur je reinitialise le tableau d'avant
-        element4 = []
+        /*je stcke dans un tableau juste les appareils de toutes les recettes dont j'ai choisi un appareil ou ingredient
+        bien sur je reinitialise le tableau d'avant*/
+        element4appliances = [];
         element2.map(el => {
-            el.map(elt => element4.push(elt));
+            el.map(elt => {
+                if (elt === el[0]) {
+                    element4appliances.push(elt)
+                }
+            })
+        })
+        console.log(element2);
+        /*je stcke dans un tableau juste les ustensils de toutes les recettes dont j'ai choisi un appareil ou ingredient
+        bien sur je reinitialise le tableau d'avant*/
+        element4ustensils = [];
+        element2.map(el => {
+            if (el[0] !== undefined) {
+                el[0].map(elt => {
+                    element4ustensils.push(elt)
+                })   
+            }
         })
         //j'affiche ma liste des ingredients avec ceux restants, en ayant choisi l'ingredinet d'avant
         mapIngredients.innerHTML = "";
-        element4.map(el => {
-            arrayIngredients2.map(elt => {
+        element4ingredients.map(el => {
+            arrayIngredients2[0].map(elt => {
                 if (elt.textContent === el) {
                     mapIngredients.appendChild(elt);
                 }
             })
         })
+        //j'affiche ma liste des appareils avec ceux restants, en ayant choisi l'ingredinet d'avant
+        mapAppareils.innerHTML = "";
+        element4appliances.map(el => {
+            arrayIngredients2[1].map(elt => {
+                if (elt.textContent === el) {
+                    mapAppareils.appendChild(elt);
+                }
+            })
+        })
+        //j'affiche ma liste des ustensils avec ceux restants, en ayant choisi l'ingredinet d'avant
+        mapUstensils.innerHTML = "";
+        element4ustensils.map(el => {
+            arrayIngredients2[2].map(elt => {
+                if (elt.textContent === el) {
+                    mapUstensils.appendChild(elt);
+                }
+            })
+        })
+        console.log(arrayIngredients2[2]);
+        console.log(element4ustensils);
         //j'affiche dans ma section du coup juste les recettes de l'ingrédient dont on a créé le tag
         arrayRecipes.map(el => {
             element3.map(elt => {
@@ -226,12 +386,22 @@ async function getRecipes() {
                 }
             })
         })
-        //je fait disparaitre la liste des ingredients une fois le traitement de triage des recettes terminé
-        containerElementsIngredient.style.display = 'block';
-        containerElements2Ingredient.style.display = 'none';
+        //je fait disparaitre la liste des ingredients et des appareils une fois le traitement de triage des recettes terminé
+        //containerElementsIngredient.style.display = 'block';
+        //containerElements2Ingredient.style.display = 'none';
+        if (e.path[0].id === 'ingredients') {
+            containerElementsIngredient.style.display = 'block';
+            containerElements2Ingredient.style.display = 'none';
+        } else if (e.path[0].id === 'appareils') {
+            containerElementsAppareils.style.display = 'block';
+            containerElements2Appareils.style.display = 'none';
+        } else if (e.path[0].id === 'ustensils') {
+            containerElementsUstensils.style.display = 'block';
+            containerElements2Ustensils.style.display = 'none';
+        }
         chevronClick = true;
-        
-        //console.log(element2);
+        chevronClickAppareils = true;
+        chevronClickUstensils = true;
 
     //JE SUPPRIME UN TAG TOUT EN LAISSANT MA SECTION TRIEE SELON LES TAGS RESTANTS    
         /*je recupere l'element close pour fermer un tag, du coup je recupere tous les close que je stocke dans un array, et je donne à chaque element de l'array
@@ -273,25 +443,66 @@ async function getRecipes() {
                                     return element2.push(el)
                                 }
                             })
-                            console.log(element2);
                             /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
                             bien sur à chaque tag choisi le tableau doit etre reinitialisé*/
                             element3 = [];
                             element2.map(el => {
                                 element3.push(el[el.length -1])
                             })
-                            /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient
+                            /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient ou apareil ou ustensil
                             bien sur je reinitialise le tableau d'avant*/
-                            element4 = []
+                            element4ingredients = []
                             element2.map(el => {
-                                el.map(elt => element4.push(elt));
+                                el.map(elt => {
+                                    if (elt !== el[0]) {
+                                        element4ingredients.push(elt)   
+                                    }
+                                });   
+                            })
+                            /*je stcke dans un tableau juste les appareils de toutes les recettes dont j'ai choisi un appareil ou ingredient ou ustensil
+                            bien sur je reinitialise le tableau d'avant*/
+                            element4appliances = [];
+                            element2.map(el => {
+                                el.map(elt => {
+                                    if (elt === el[0]) {
+                                        element4appliances.push(elt)
+                                    }
+                                })
+                            })
+                            /*je stcke dans un tableau juste les ustensils de toutes les recettes dont j'ai choisi un appareil ou ingredient ou ustensil
+                            bien sur je reinitialise le tableau d'avant*/
+                            element4ustensils = [];
+                            element2.map(el => {
+                                if (el[0] !== undefined) {
+                                    el[0].map(elt => {
+                                            element4ustensils.push(elt)
+                                    })
+                                }
                             })
                             //j'affiche ma liste des ingredients avec ceux restants, en ayant choisi l'ingredinet d'avant
                             mapIngredients.innerHTML = "";
-                            element4.map(el => {
-                                arrayIngredients2.map(elt => {
+                            element4ingredients.map(el => {
+                                arrayIngredients2[0].map(elt => {
                                     if (elt.textContent === el) {
                                         mapIngredients.appendChild(elt);
+                                    }
+                                })
+                            })
+                            //j'affiche ma liste des appareils avec ceux restants, en ayant choisi l'ingredinet d'avant
+                            mapAppareils.innerHTML = "";
+                            element4appliances.map(el => {
+                                arrayIngredients2[1].map(elt => {
+                                    if (elt.textContent === el) {
+                                        mapAppareils.appendChild(elt);
+                                    }
+                                })
+                            })
+                            //j'affiche ma liste des appareils avec ceux restants, en ayant choisi l'ingredinet d'avant
+                            mapUstensils.innerHTML = "";
+                            element4ustensils.map(el => {
+                                arrayIngredients2[2].map(elt => {
+                                    if (elt.textContent === el) {
+                                        mapUstensils.appendChild(elt);
                                     }
                                 })
                             })
@@ -310,18 +521,27 @@ async function getRecipes() {
                     })
                     if (searchingCriterias.length <= 0) {
                         mapIngredients.innerHTML = "";
+                        mapAppareils.innerHTML = "";
+                        mapUstensils.innerHTML = "";
                         section.innerHTML = "";
                         arrayRecipes.map(el => {
                             section.appendChild(el)
                         })
-                        arrayIngredients2.map(elt => {
+                        arrayIngredients2[0].map(elt => {
                             mapIngredients.appendChild(elt);
+                        })
+                        arrayIngredients2[1].map(elt => {
+                            mapAppareils.appendChild(elt);
+                        })
+                        arrayIngredients2[2].map(elt => {
+                            mapUstensils.appendChild(elt);
                         })
                         element2 = [];
                         element3 = [];
-                        element4 = [];
+                        element4ingredients = [];
+                        element4appliances = [];
+                        element4ustensils = [];
                     }
-                    //console.log(element2);
                 }) 
             })
     }))  
