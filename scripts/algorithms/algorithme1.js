@@ -67,7 +67,7 @@ function getListTags( arrayListTags, arrayListTags2, containerElements, containe
   //on map notre array avec la liste de tous les ingredients, et on l'affiche dans la liste des ingredients
   arrayListTags.map((el) => {
     pIngredient = document.createElement("li");
-    pIngredient.setAttribute("class","li-ingredient-ustensils-appliances list-grou")
+    pIngredient.setAttribute("class","li-ingredient-ustensils-appliances list-group")
     pIngredient.setAttribute("id", tag);
     pIngredient.innerHTML = el;
     arrayListTags2.push(pIngredient);
@@ -210,7 +210,7 @@ function getShowSectionRecipes(arrayRecipes, section) {
 }
 
 //FONCTION POUR REINITIALISER LA SECTION DES RECIPES SI AUCUN TAG N'EST SELECTIONNE
-function resetSectionRecipes( section, arrayRecipes, arrayListIngredients2, arrayListAppliances2, arrayListUstensil ) {
+function resetSectionRecipes( section, arrayRecipes, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2 ) {
   if (searchingCriterias.length <= 0) {
     mapIngredients.innerHTML = "";
     mapAppareils.innerHTML = "";
@@ -260,7 +260,7 @@ function getSortArrayTags(cardRecipes) {
     des 50 recettes (arraySearchIngredient)*/
   function isSubsetOf(set, subset) {
     for (let i = 0; i < set.length; i++) {
-      if (subset.indexOf(set[i]) == -1) {
+      if (subset.indexOf(set[i]) == -1 ) {
         return false;
       }
     }
@@ -293,7 +293,7 @@ function getSortSectionRecipes( section, cardRecipes, arrayRecipes, ePathId, arr
     getSortListTagsAppliances();
     getSortListTagsUstensils();
     //je lance la fonction pour afficher ma liste des ingredients avec ceux restants, en ayant choisi l'ingredinet d'avant
-    getNewShowListTags( mapIngredients, arrayListIngredients2, listIngredientsWith );
+    getNewShowListTags( mapIngredients, arrayListIngredients2, listIngredientsWithTag);
     //je lance la fonction pour afficher ma liste des appareils avec ceux restants, en ayant choisi l'ingredinet d'avant
     getNewShowListTags( mapAppareils, arrayListAppliances2, listappliancesWithTag);
     //je lance la fonction pour afficher ma liste des ustensils avec ceux restants, en ayant choisi l'ingredinet d'avant
@@ -327,9 +327,7 @@ function DeleteTags(section, cardRecipes, arrayRecipes, arrayListIngredients2, a
   close1 = Array.from(document.getElementsByClassName("close1"));
   close1.forEach((elt) => {
     elt.addEventListener("click", () => {
-      let Arrayelemtag = Array.from(
-        document.getElementsByClassName("elem-tag")
-      );
+      let Arrayelemtag = Array.from(document.getElementsByClassName("elem-tag"));
       Arrayelemtag.forEach((el) => {
         if (el.firstElementChild.textContent === elt.id) {
           el.setAttribute("class", "d-none");
