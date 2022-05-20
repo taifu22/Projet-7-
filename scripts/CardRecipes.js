@@ -7,10 +7,35 @@ class CardRecipes{
     async displayData() {
         //variables pour stocker les tableaux qu'on utilisera pour stocker les ingredinets, ustensiles et appareils
         let arrayRecipes = [];
-        let arrayIngredients = []; arrayIngredients.push([]); arrayIngredients.push([]); arrayIngredients.push([]);
-        let arrayIngredients2 = []; arrayIngredients2.push([]); arrayIngredients2.push([]); arrayIngredients2.push([]);
+        //voici le tableau où je vais stcker en index 0 les ingredients, en index 1 les appareils, et en 2 les ustensiles
+        let arrayTags = []; arrayTags.push([]); arrayTags.push([]); arrayTags.push([]);
+        //voici le deuxieme tableau où je vais stcker en index 0 les ingredients, en index 1 les appareils, et en 2 les ustensiles
+        let arrayTags2 = []; arrayTags2.push([]); arrayTags2.push([]); arrayTags2.push([]);
         let arrayIngredientsTags = [];
         let recipe = null; 
+        // //liste de variables qui stockent les modales pour le choix des tags, à savoir que l'element2 c'est la modale fermé et element la modale ouverte
+        let containerElementsIngredient = document.querySelector('.container-elements-ingredient');
+        let containerElements2Ingredient = document.querySelector('.container-elements2-ingredient');
+        let containerElementsAppareils = document.querySelector('.container-elements-appareils');
+        let containerElements2Appareils = document.querySelector('.container-elements2-appareils');
+        let containerElementsUstensils = document.querySelector('.container-elements-ustensils');
+        let containerElements2Ustensils = document.querySelector('.container-elements2-ustensils');
+        //liste des variables stoquants les chevrons pour l'ouverture et fermeture des modales
+        const chevronIngredients = document.querySelectorAll('.chevron-ingredients');
+        const chevronAppareils = document.querySelectorAll('.chevron-appareils');
+        const chevronUstensils = document.querySelectorAll('.chevron-ustensils');
+        //liste des variables pour gerer l'ouverture des 3 modales, true modale fermé, false modale ouverte
+        let chevronClickIngredient = true;
+        let chevronClickAppareils = true;
+        let chevronClickUstensils = true;
+        //liste des variables pour trouver l'input dans les mune ingredients appareils et ustensiles
+        let checkInputIngredients = null;
+        let checkInputAppareils = null;
+        let checkInputUstensils = null;
+        //3 variables pour l'affichage de la liste de tags dans les 3 modales, ingredients, appareils, ustensils
+        const mapIngredients = document.querySelector('.map-ingredients');
+        const mapAppareils = document.querySelector('.map-appareils');
+        const mapUstensils = document.querySelector('.map-ustensils');
         //recuperation des données du fichier json
         const cardsRecipes = await this.api.getRecipes();
         //on map nos données récuperés pour afficher les cards avec les recettes
@@ -56,27 +81,34 @@ class CardRecipes{
     
            //je stocke tous les ingredients dans un tableau, bien sur je fait attention de ne pas mettre des doublons
            el.ingredients.map(elt => {
-               if (arrayIngredients[0].indexOf(elt.ingredient) === -1) {
-                   return arrayIngredients[0].push(elt.ingredient)
+               if (arrayTags[0].indexOf(elt.ingredient) === -1) {
+                   return arrayTags[0].push(elt.ingredient)
                }
            })
            //je stocke tous les appareils dans un tableau, bien sur je fait attention de ne pas mettre des doublons
-            if (arrayIngredients[1].indexOf(el.appliance) === -1) {
-                return arrayIngredients[1].push(el.appliance)
+            if (arrayTags[1].indexOf(el.appliance) === -1) {
+                return arrayTags[1].push(el.appliance)
             }
             //je stocke tous les utensiles dans un tableau, bien sur je fait attention de ne pas mettre des doublons
             el.ustensils.map(elt => {
-                if (arrayIngredients[2].indexOf(elt) === -1) {
-                    return arrayIngredients[2].push(elt)
+                if (arrayTags[2].indexOf(elt) === -1) {
+                    return arrayTags[2].push(elt)
                 }
             })
            //je clone ce tableau car j'en aurait besoin pour la suppression des tags
-           arrayIngredientsTags = [...arrayIngredients];
+           arrayIngredientsTags = [...arrayTags];
         })
 
-        /*je lance la fonction qui gere toute la logique du premier algorithme, du coup avec les variables dont j'ai besoin 
-        depuis cette class CardRecipes*/
-        getRecipes(this.recipesSection, arrayRecipes, arrayIngredients[0], arrayIngredients[1], arrayIngredients[2], arrayIngredientsTags, cardsRecipes.recipes)
+        //je lance la fonciton pour la recherche des recettes par titre depuis la barre de recherhce principale
+        getRecipesBarSearch(this.recipesSection, arrayRecipes);
+        //je lance les 3 fonctions pour l'affichage des listes contenants les tags à utiliser pour les ingredients, les ustesils et les appareils
+        getListTags(arrayTags[0], arrayTags2[0], containerElementsIngredient, containerElements2Ingredient, chevronIngredients, chevronClickIngredient, mapIngredients, 'ingredients', checkInputIngredients);
+        getListTags(arrayTags[1], arrayTags2[1], containerElementsAppareils, containerElements2Appareils, chevronAppareils, chevronClickAppareils, mapAppareils,'appareils', checkInputAppareils);
+        getListTags(arrayTags[2], arrayTags2[2], containerElementsUstensils, containerElements2Ustensils, chevronUstensils, chevronClickUstensils, mapUstensils, 'ustensils', checkInputUstensils);
+        //je lance la fonction pour l'affichage des tags
+        getShowTags(this.recipesSection, arrayRecipes, cardsRecipes.recipes, arrayTags2[0], arrayTags2[1], arrayTags2[2]);
+        //je lance la fonction pour supprimer un tag et du coup filtrer ma section de recettes selon cette suppression
+        
     }
 }
 
