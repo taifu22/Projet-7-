@@ -142,7 +142,7 @@
             "time": 50,
             "description": "Faire cuire le riz. Une fois le riz cuit, le laisser refroidir. Couper les oeufs dur en quarts ou en lamelle au choix, coupez le tomates en dés, ajouter au riz les oeufs, les tomates, le poisson, le maïs et la vinaigrette. Ajouter au gout de chacun des corniches, olives etc..",
             "appliance": "Cuiseur de riz",
-            "ustensils": ["Saladier", "Passoire"]
+            "ustensils": ["Saladier-ustensil", "Passoire"]
         },
         {
             "id": 5,
@@ -220,7 +220,7 @@
             "time": 50,
             "description": "Commencez par mélanger les oeufs le sucre et le sucre vanillé dans un saladier, découper les pommes en tranches, ajouter la crème fraiche aux oeufs. Une fois que tout est pret, étalez la tarte dans le moule. N'oubliez pas de piquer le fond avec une fourchette avant depositionner les pommes sur la tarte. Finallement verser la préparation à base d'oeufs et de crême fraiche. Laisser cuire au four pendant 30 minutes",
             "appliance": "Four",
-            "ustensils": ["Moule à tarte", "Saladier", "Fourchette"]
+            "ustensils": ["Moule à tarte", "Saladier-ustensil", "Fourchette"]
         },{
             "id": 7,
             "name": "Tartelettes au chocolat et aux fraises",
@@ -463,7 +463,7 @@
             "time":40,
             "description":"Cuire les pommes de terre environ 30 minutes. Découper les échalottes finement. Durant la cuisson des pommes de terre. Préparez la vinaigrette avec l'huile d'olive et le vinaigre de cidre. Salez poivrez à discrétion. Dans un saladier, mettre le mâche. Ajouter",
             "appliance": "Casserole",
-            "ustensils":["Couteau","Saladier","Cuillère en bois"]
+            "ustensils":["Couteau","Saladier-ustensil","Cuillère en bois"]
         },
         {
             "id": 14,
@@ -542,7 +542,7 @@
             "time": 60,
             "description":"Mélangez dans un saladier, la farine, les oeufs, et le lait. Battez jusqu'à avoir une masse homogène. Pendant ce temps faites fondre le beurre et ajoutez en une partie à la pâte à crêpes. Faire fondre le chocolat ( avec le reste du beurre salé ). Lorsque vous chauffez les crêpes. Ajouter le chocolat fondu et les bananes coupées en rondelles. Ajoutez une touche de chantilly pour les gourmands",
             "appliance": "Poële à crêpe",
-            "ustensils":["Saladier", "Louche", "Cuillère en bois"]
+            "ustensils":["Saladier-ustensil", "Louche", "Cuillère en bois"]
         },
         {
             "id": 16,
@@ -893,7 +893,7 @@
             "time": 30,
             "description":"Faire fondre le beurre et le mélanger avec le sucre. Finalement ajouter l'oeuf. Ajouter la farine tout en mélangeant peu pa peu pour avoir une masse sans grumaux. Ajouter les pépites de chocolat. Faire, une plaque de cuisson de petites boules pour les cookies. Mettre au four à 180° pour 10 minutes.",
             "appliance": "Four",
-            "ustensils":["Fouet", "Saladier", "Plaque de cuisson"]
+            "ustensils":["Fouet", "Saladier-ustensil", "Plaque de cuisson"]
         },
         {
             "id": 26,
@@ -1365,7 +1365,7 @@
             "time": 40,
             "description":"Découper les pommes en dé. Mélanger dans un saladier la farine, le sucre et le beurre. Bien mélanger. Beurrer le moule et ajouter les pommes. Par dessus placez la pate que vous avez obtenu. Cuire 20 minutes au four",
             "appliance": "Four",
-            "ustensils":["Saladier", "Couteau","Fouet"]
+            "ustensils":["Saladier-ustensil", "Couteau","Fouet"]
         },
         {
             "id": 40,
@@ -1449,7 +1449,7 @@
             "time": 60,
             "description":"Commencez par préparer la mousse au chocolat au moins 2 heures avant. Quand la mousse est prête et a reposée. Alors mouiller les boudoirs dans le jus des poires. Disposer. Alterner : mousse au chocolat, boudoirs et poires. Mettre au frais.",
             "appliance": "Moule à charlotte",
-            "ustensils":["Saladier", "Couteau", "Fouet"]
+            "ustensils":["Saladier-ustensil", "Couteau", "Fouet"]
         },
         {
             "id": 43,
@@ -1548,7 +1548,7 @@
             "time": 30,
             "description":"Faire bouillir le lait ( on peut y ajouter de l'essence de vanille. Battre les oeufs et le sucre, ajouter la farine puis finalement ajouter le lait chaud. Remettre à feu doux pour faire épaissir en remuant pendant 5 à 10 minutes.",
             "appliance": "Casserole",
-            "ustensils":["Fouet","Saladier"]
+            "ustensils":["Fouet","Saladier-ustensil"]
         },
         {
             "id": 46,

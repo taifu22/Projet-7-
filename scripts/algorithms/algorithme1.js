@@ -5,6 +5,7 @@ let arrayListUstensils2 = [];
 let arrayListIngredients2 = [];
 let arrayListAppliances2 = [];
 let arrayListIngredientsUstensilsAppliances = [];
+let arrayListUsetensilsInArray = [];
 let arrayListAllTitles = [];
 let listIngredientsWithTag = [];
 let listappliancesWithTag = [];
@@ -15,7 +16,8 @@ let elementSearc;
 let newelementSearc;
 let foundIngredients;
 let close1;
-let arraySearchIngredient = [];
+let arraySearchTags = [];
+let arraySearchTagsWithUstensils = [];
 let arrayRecipes2 = [];
 //liste de variables qui stockent les modales pour le choix des tags, à savoir que l'element2 c'est la modale fermé et element la modale ouverte
 let containerElementsIngredient = document.querySelector(".container-elements-ingredient");
@@ -75,7 +77,7 @@ function getListTags( arrayListTags, arrayListTags2, containerElements, containe
   });
   //j'affiche la modale dans l'input du choix pour la recherche selon les ingredients
   chevron.forEach((btn) =>
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
       if (chevronClick) {
         containerElements.style.display = "none";
         containerElements2.style.display = "block";
@@ -85,6 +87,7 @@ function getListTags( arrayListTags, arrayListTags2, containerElements, containe
         containerElements2.style.display = "none";
         chevronClick = true;
       }
+      e.stopPropagation()
     })
   );
   //on filtre notre menu ingredient selon la value de l'input
@@ -102,7 +105,7 @@ function getListTags( arrayListTags, arrayListTags2, containerElements, containe
 }
 
 //FONCTION POUR L'AFFICHAGE DU TAG CHOISI
-function getShowTags( section, arrayRecipes, cardRecipes, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2) {
+function getShowTags( section, arrayRecipes, cardRecipes, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, arrayUstensilsTags) {
   arrayRecipes2 = [...arrayRecipes];
   //je recupere ma liste des tags (ingredients, ustensils, appareils)
   let liIngredient = document.querySelectorAll(".li-ingredient-ustensils-appliances");
@@ -131,9 +134,9 @@ function getShowTags( section, arrayRecipes, cardRecipes, arrayListIngredients2,
       //je vide ma section pour trier aprés selon l'ingrédient de mon tag
       section.innerHTML = "";
       //je lance la fonction (declaré en bas) pour le tri de ma section recettes selon le tag choisi
-      getSortSectionRecipes( section, cardRecipes, arrayRecipes, ePathId, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2);
+      getSortSectionRecipes( section, cardRecipes, arrayRecipes, ePathId, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, arrayUstensilsTags);
       //je lance la fonction (declaré en bas) pour supprimer un tag existant et du coup trier selon cette suppression
-      DeleteTags( section, cardRecipes, arrayRecipes, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2);
+      DeleteTags( section, cardRecipes, arrayRecipes, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, arrayUstensilsTags);
       //console.log(chevronClickIngredient);
     })
   );
@@ -155,12 +158,12 @@ function getSortListTagsINgredients() {
 
 //FONCTION POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (APPAREIL)
 function getSortListTagsAppliances() {
-  /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient ou apareil
+  /*je stcke dans un tableau juste les appareils de toutes les recettes dont j'ai choisi un ingredient ou apareil
     bien sur je reinitialise le tableau d'avant*/
   listappliancesWithTag = [];
   arrayListIngredientsUstensilsAppliances.map((el) => {
     el.map((elt) => {
-      if (elt === el[1]) {
+      if (elt === el[0]) {
         listappliancesWithTag.push(elt);
       }
     });
@@ -169,18 +172,12 @@ function getSortListTagsAppliances() {
 
 //FONCTION POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (USTENSIL)
 function getSortListTagsUstensils() {
-  /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient ou apareil
+  /*je stcke dans un tableau juste les utensils de toutes les recettes dont j'ai choisi un ingredient ou apareil
     bien sur je reinitialise le tableau d'avant*/
   listustensilsWithTag = [];
-  arrayListIngredientsUstensilsAppliances.map((el) => {
-    if (Array.isArray(el[0]) && el[0].length) {
-      if (el[0] !== undefined) {
-        el[0].map((elt) => {
-          listustensilsWithTag.push(elt);
-        });
-      }
-    }
-  });
+  arrayListUsetensilsInArray.map(el => {
+     return listustensilsWithTag.push(el)
+  })
 }
 
 //FONCTION POUR L'AFFICHAGE DE LA LISTE DE TAGS RESTANTS APRES EN AVOIR CHOISI UN
@@ -237,11 +234,11 @@ function resetSectionRecipes( section, arrayRecipes, arrayListIngredients2, arra
 }
 
 //FONCTION POUR REMPLIR MON TABLEAUX QUI M'AFFICHERA ENSUITE LES RECETTES DONT J'AI LES TAGS EN COURS
-function getSortArrayTags(cardRecipes) {
-  /*je stocke les ingredients et le name(dans un array) de chaque recette dans un array, donc j'aurais 50 arrays (recettes) dans un array,
-    mais avant je pense bien à reinitialiser ce tableau car sinon à chaque fois que le else se lance, mon tableau ajoute des doublons*/
-  arraySearchIngredient = [];
-  arrayListIngredientsUstensilsAppliances = [];
+function getSortArrayTags(cardRecipes, arrayListUstensils) {
+  /*je stocke les appareils/ingredients et le name(dans un array) de chaque recette dans notre 'arrayListIngredientsUstensilsAppliances'
+    mais avant je pense bien à reinitialiser ce tableau car sinon à chaque fois, mon tableau ajoute des doublons
+    Ce tableau du coup contient les recettes dont on a choisi un ingredients ustensils ou appareil*/
+  arraySearchTags = [];
   cardRecipes.map((el) => {
     let name = [el.name];
     let ingredient = el.ingredients.map((el) => {
@@ -254,32 +251,74 @@ function getSortArrayTags(cardRecipes) {
     ingredient.unshift(appliance);
     ingredient.unshift(ustensils);
     ingredient.push(name);
-    arraySearchIngredient.push(ingredient);
+    arraySearchTags.push(ingredient);
   });
-  /*je créé une fonction pour pouvoir verifier si les elements de SearchingCriterias (les tags en cours), sont bien presents, dans un index
-    des 50 recettes (arraySearchIngredient)*/
+  //je créé un autre tableau où cette fois je melange les ustensils avec les ingredients et appareils
+  arraySearchTagsWithUstensils = [];
+  cardRecipes.map(el => {
+    let name = [el.name];
+    let ingredient = el.ingredients.map((el) => {
+      return el.ingredient;
+    });
+    let appliance = el.appliance;
+    let ustensils = el.ustensils.map((el) => {
+      return el;
+    });
+    ingredient.unshift(appliance)
+    ustensils.map(el => {
+      return ingredient.unshift(el)
+    })
+    ingredient.push(name);
+    arraySearchTagsWithUstensils.push(ingredient)
+  })
+  /*je crée une fonction pour pouvoir verifier si les elements de SearchingCriterias (les tags en cours), sont bien presents, dans un index
+    des recettes en cours d'affichage (arraySearchTags)*/
   function isSubsetOf(set, subset) {
     for (let i = 0; i < set.length; i++) {
-      if (subset.indexOf(set[i]) == -1 ) {
+      if (subset.indexOf(set[i]) == -1) {
         return false;
       }
     }
     return true;
   }
   /*donc ici je push dans mon arrayListIngredientsUstensilsAppliances juste les recettes lié au tag, que ce soit ingredient, appareil ou ustensil*/
-  arraySearchIngredient.map((el) => {
+  arrayListIngredientsUstensilsAppliances = [];
+  arraySearchTagsWithUstensils.map(el => {
     const result = isSubsetOf(searchingCriterias, el);
-    if (result !== false) {
+    if (result !== false || (result !== false && el[0].includes(searchingCriteria)!== false)) {
       return arrayListIngredientsUstensilsAppliances.push(el);
     }
   });
+  //maintenant je sépare les ustensils de mes ingredients et appareils, puis je les metes dans un tableau independent
+  arrayListUsetensilsInArray = []
+  arrayListUstensils.map(el => {
+    if (el !== undefined) {
+      arrayListIngredientsUstensilsAppliances.map(elt => {
+        if (elt.indexOf(el) !== -1) {
+          arrayListUsetensilsInArray.push(el)
+        }
+      }) 
+    }
+  })
+  //maintenant je supprime les ustensils de mon 'arrayListIngredientsUstensilsAppliances'
+  arrayListUsetensilsInArray.map(elt => {
+    arrayListIngredientsUstensilsAppliances.filter(el => {
+      if (el.indexOf(elt) !== -1 ) {
+          for(var i = el.length-1 ; i >=0 ; i--){
+              if (el[i] === elt) {
+                  el.splice(i,1);
+              }
+          }
+      }
+  })
+  })
 }
 
 //JE FAIS UNE FONCTION AVEC UNE CONDITION POUR TRIER MA SECTION DE RECETTES SI J'AI UN SEARCHINGCRITERIA ACTIVE, C'EST A DIRE SI J'AI CHOISI UN TAG
-function getSortSectionRecipes( section, cardRecipes, arrayRecipes, ePathId, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2) {
+function getSortSectionRecipes( section, cardRecipes, arrayRecipes, ePathId, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, arrayListUstensils) {
   if (searchingCriteria !== null) {
     //je lance ma fonction pour creer et trier le tableau qui contient mes tags en cours
-    getSortArrayTags(cardRecipes);
+    getSortArrayTags(cardRecipes, arrayListUstensils);
     //je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
     //bien sur à chaque tag choisi le tableau doit etre reinitialisé
     arrayListAllTitles = [];
@@ -320,7 +359,7 @@ function getSortSectionRecipes( section, cardRecipes, arrayRecipes, ePathId, arr
 }
 
 //FONCTION POUR SUPPRIMER UN TAG TOUT EN LAISSANT MA SECTION TRIEE SELON LES TAGS RESTANTS
-function DeleteTags(section, cardRecipes, arrayRecipes, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2) {
+function DeleteTags(section, cardRecipes, arrayRecipes, arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, arrayUstensilsTags) {
   /*je recupere l'element close pour fermer un tag, du coup je recupere tous les close que je stocke dans un array, et je donne à chaque element de l'array
   un event click, puis je dit si lid de lelement close est === au textContent de mon elemtag alors tu me supprime le tag et tu me filtre ma section de
   recettes sans le tag*/
@@ -337,7 +376,7 @@ function DeleteTags(section, cardRecipes, arrayRecipes, arrayListIngredients2, a
             searchingCriterias.splice(index, 1);
           }
           //je lance ma fonction pour creer et trier le tableau qui contient mes tags en cours
-          getSortArrayTags(cardRecipes);
+          getSortArrayTags(cardRecipes, arrayUstensilsTags);
           /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
                         bien sur à chaque tag choisi le tableau doit etre reinitialisé*/
           arrayListAllTitles = [];

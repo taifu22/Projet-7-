@@ -1,5 +1,5 @@
 class CardRecipes{
-    constructor(){
+    constructor(){ 
         this.api = new RecipesApi('data/recipes.json');
         this.recipesSection = document.querySelector('.section-articles'); 
     }
@@ -11,7 +11,7 @@ class CardRecipes{
         let arrayTags = []; arrayTags.push([]); arrayTags.push([]); arrayTags.push([]);
         //voici le deuxieme tableau où je vais stcker en index 0 les ingredients, en index 1 les appareils, et en 2 les ustensiles
         let arrayTags2 = []; arrayTags2.push([]); arrayTags2.push([]); arrayTags2.push([]);
-        let arrayIngredientsTags = [];
+        let arrayUstensilsTags = [];
         let recipe = null; 
         // //liste de variables qui stockent les modales pour le choix des tags, à savoir que l'element2 c'est la modale fermé et element la modale ouverte
         let containerElementsIngredient = document.querySelector('.container-elements-ingredient');
@@ -96,7 +96,7 @@ class CardRecipes{
                 }
             })
            //je clone ce tableau car j'en aurait besoin pour la suppression des tags
-           arrayIngredientsTags = [...arrayTags];
+           arrayUstensilsTags = [...arrayTags[2]];
         })
 
         //je lance la fonciton pour la recherche des recettes par titre depuis la barre de recherhce principale
@@ -106,7 +106,7 @@ class CardRecipes{
         getListTags(arrayTags[1], arrayTags2[1], containerElementsAppareils, containerElements2Appareils, chevronAppareils, chevronClickAppareils, mapAppareils,'appareils', checkInputAppareils);
         getListTags(arrayTags[2], arrayTags2[2], containerElementsUstensils, containerElements2Ustensils, chevronUstensils, chevronClickUstensils, mapUstensils, 'ustensils', checkInputUstensils);
         //je lance la fonction pour l'affichage des tags
-        getShowTags(this.recipesSection, arrayRecipes, cardsRecipes.recipes, arrayTags2[0], arrayTags2[1], arrayTags2[2]);
+        getShowTags(this.recipesSection, arrayRecipes, cardsRecipes.recipes, arrayTags2[0], arrayTags2[1], arrayTags2[2], arrayUstensilsTags);
         //je lance la fonction pour supprimer un tag et du coup filtrer ma section de recettes selon cette suppression
         
     }
