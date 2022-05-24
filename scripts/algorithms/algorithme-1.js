@@ -1,12 +1,10 @@
 class Algorithme {
-    constructor(recipesSection, arrayRecipes, /*recipe,*/ cardRecipes, arrayUstensilsTags){
+    constructor(recipesSection, arrayRecipes, cardRecipes, arrayUstensilsTags){
         this.recipesSection = recipesSection
         //variables pour stocker les tableaux qu'on utilisera pour stocker les ingredinets, ustensiles et appareils
         this.arrayRecipes = arrayRecipes;
-        
+        //variable pour stocker tous les utensils dans un tableau
         this.arrayUstensilsTags = arrayUstensilsTags;
-        //variable qui stocke 
-        //this.recipe = recipe; 
         //variables pour stocker les tags en cours
         this.searchingCriterias = [];
         this.searchingCriteria = null;
@@ -31,10 +29,10 @@ class Algorithme {
     }
 
     //FUNCTION POUR LA RECHERCHE DES RECETTES PAR TITRE DANS LA BARRE DE RECHERCHE PRINCIPALE
-    getRecipesBarSearch() {
+    getRecipesBarSearch(mapIngredients, arrayListIngredients2, mapAppareils, arrayListAppliances2) {
         let check = null;
     //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
-    document.querySelector(".form-control").addEventListener("change", function () {
+    document.querySelector(".form-control").addEventListener("input", function () {
         check = this.value;
     });
     //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer/afficher juste les recettes
@@ -43,14 +41,34 @@ class Algorithme {
     formulaire.addEventListener("submit", (e) => {
         e.preventDefault();
         this.recipesSection.innerHTML = "";
+        mapIngredients.innerHTML = "";
         //on filtre notre tableau pour afficher juste les cards qui nous interessent
         this.arrayRecipes.filter((el) => {
             //je fais une condition pour trouver mes cards par rapport à une lettre ou une chaine de caracthere présente dans le nom de la recette
             //que j'ai mis tout à l'heure dans le id de chaque recette
-            if (el.id.toLowerCase().indexOf(check) !== -1) {
-                this.recipesSection.appendChild(el);
-            }
+            this.cardsRecipes.map(elt => {
+              elt.ingredients.map(elt1 => {
+                if (el.id.toLowerCase().indexOf(check) !== -1 && el.id === elt.name) {
+                  this.recipesSection.appendChild(el);
+                } else if(elt.description.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
+                  this.recipesSection.appendChild(el);
+                    let ingredient = elt.ingredients.map((el) => {
+                      return el.ingredient;
+                    });
+                    let appliance = elt.appliance;
+                    ingredient.unshift(appliance);
+                    this.arraySearchTags.push(ingredient);
+                } else if (elt1.ingredient.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
+                  this.recipesSection.appendChild(el);                  
+                }
+              })
+            }) 
         })
+        this.getSortListTagsINgredients(this.arraySearchTags);
+        this.getSortListTagsAppliances(this.arraySearchTags);
+        this.getSortListTagsUstensils(this.arraySearchTags)
+        this.getNewShowListTags(mapIngredients, arrayListIngredients2, this.listIngredientsWithTag)
+        this.getNewShowListTags(mapAppareils, arrayListAppliances2, this.listappliancesWithTag)
     })
     }
 
@@ -141,39 +159,46 @@ class Algorithme {
   }
 
   //FONCTION POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (INGREDIENT)
-     getSortListTagsINgredients() {
+  // ici j'affiche pas dans le menu ustensils les ustensils restants car j'ai créé une seul fonction qui me fera le job pour les 3 (ingredients ustensils et appliances)
+     getSortListTagsINgredients(array) {
     /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient ou apareil
       bien sur je reinitialise le tableau d'avant*/
     this.listIngredientsWithTag = [];
-    this.arrayListIngredientsUstensilsAppliances.map((el) => {
+    array.map((el) => {
       el.map((elt) => {
+        //console.log(elt);
         if (elt !== el[0]) {
-          this.listIngredientsWithTag.push(elt);
+          if ( this.listIngredientsWithTag.indexOf(elt) === -1) {
+            this.listIngredientsWithTag.push(elt); 
+          }
         }
       });
     });
   }
 
   //FONCTION POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (APPAREIL)
-    getSortListTagsAppliances() {
+    getSortListTagsAppliances(array) {
     /*je stcke dans un tableau juste les appareils de toutes les recettes dont j'ai choisi un ingredient ou apareil
       bien sur je reinitialise le tableau d'avant*/
     this.listappliancesWithTag = [];
-    this.arrayListIngredientsUstensilsAppliances.map((el) => {
+    array.map((el) => {
       el.map((elt) => {
         if (elt === el[0]) {
-          this.listappliancesWithTag.push(elt);
+          if ( this.listappliancesWithTag.indexOf(elt) === -1) {
+            this.listappliancesWithTag.push(elt); 
+          }
         }
       });
     });
+    console.log(this.listappliancesWithTag);
   }
   
   //FONCTION POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (USTENSIL)
-    getSortListTagsUstensils() {
+    getSortListTagsUstensils(array) {
     /*je stcke dans un tableau juste les utensils de toutes les recettes dont j'ai choisi un ingredient ou apareil
-      bien sur je reinitialise le tableau d'avant*/
+    bien sur je reinitialise le tableau d'avant*/
     this.listustensilsWithTag = [];
-    this.arrayListUsetensilsInArray.map(el => {
+    array.map(el => {
        return this.listustensilsWithTag.push(el)
     })
   }
@@ -232,7 +257,7 @@ class Algorithme {
   }
 
   //FONCTION POUR REMPLIR MON TABLEAUX QUI M'AFFICHERA ENSUITE LES RECETTES DONT J'AI LES TAGS EN COURS
-    getSortArrayTags() {
+    getSortArrayTags(value) {
     /*je stocke les appareils/ingredients et le name(dans un array) de chaque recette dans notre 'arrayListIngredientsUstensilsAppliances'
       mais avant je pense bien à reinitialiser ce tableau car sinon à chaque fois, mon tableau ajoute des doublons
       Ce tableau du coup contient les recettes dont on a choisi un ingredients ustensils ou appareil*/
@@ -283,7 +308,7 @@ class Algorithme {
     this.arrayListIngredientsUstensilsAppliances = [];
     this.arraySearchTagsWithUstensils.map(el => {
       const result = isSubsetOf(this.searchingCriterias, el);
-      if (result !== false || (result !== false && el[0].includes(this.searchingCriteria)!== false)) {
+      if (result !== false || (result !== false && el[0].includes(value)!== false)) {
         return this.arrayListIngredientsUstensilsAppliances.push(el);
       }
     });
@@ -316,7 +341,7 @@ class Algorithme {
     getSortSectionRecipes(arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, mapIngredients, mapAppareils, mapUstensils ) {
     if (this.searchingCriteria !== null) {
       //je lance ma fonction pour creer et trier le tableau qui contient mes tags en cours
-      this.getSortArrayTags();
+      this.getSortArrayTags(this.searchingCriteria);
       //je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
       //bien sur à chaque tag choisi le tableau doit etre reinitialisé
       this.arrayListAllTitles = [];
@@ -326,9 +351,9 @@ class Algorithme {
   
       /*je lance les 3 fonction pour stocker dans 3 tableau chacun juste les ingredients, appareils, ustensils de toutes les recettes dont j'ai 
       choisi un ingredient, apareil, ou utensile*/
-      this.getSortListTagsINgredients();
-      this.getSortListTagsAppliances();
-      this.getSortListTagsUstensils();
+      this.getSortListTagsINgredients(this.arrayListIngredientsUstensilsAppliances);
+      this.getSortListTagsAppliances(this.arrayListIngredientsUstensilsAppliances);
+      this.getSortListTagsUstensils(this.arrayListUsetensilsInArray);
       //je lance la fonction pour afficher ma liste des ingredients avec ceux restants, en ayant choisi l'ingredinet d'avant
       this.getNewShowListTags( mapIngredients, arrayListIngredients2, this.listIngredientsWithTag);
       //je lance la fonction pour afficher ma liste des appareils avec ceux restants, en ayant choisi l'ingredinet d'avant
@@ -374,7 +399,7 @@ class Algorithme {
               this.searchingCriterias.splice(index, 1);
             }
             //je lance ma fonction pour creer et trier le tableau qui contient mes tags en cours
-            this.getSortArrayTags();
+            this.getSortArrayTags(this.searchingCriteria);
             /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
                           bien sur à chaque tag choisi le tableau doit etre reinitialisé*/
             this.arrayListAllTitles = [];
@@ -383,9 +408,9 @@ class Algorithme {
             });
             /*je lance les 3 fonction pour stocker dans 3 tableau chacun juste les ingredients, appareils, ustensils de toutes les recettes dont j'ai 
             choisi un ingredient, apareil, ou utensile*/
-            this.getSortListTagsINgredients();
-            this.getSortListTagsAppliances();
-            this.getSortListTagsUstensils();
+            this.getSortListTagsINgredients(this.arrayListIngredientsUstensilsAppliances);
+            this.getSortListTagsAppliances(this.arrayListIngredientsUstensilsAppliances);
+            this.getSortListTagsUstensils(this.arrayListUsetensilsInArray);
             //j'affiche ma liste des ingredients avec ceux restants, en ayant choisi l'ingredinet d'avant
             this.getNewShowListTags( mapIngredients, arrayListIngredients2, this.listIngredientsWithTag);
             //j'affiche ma liste des appareils avec ceux restants, en ayant choisi l'ingredinet d'avant

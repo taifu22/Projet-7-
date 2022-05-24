@@ -1132,7 +1132,7 @@
             "servings": 4,
             "ingredients": [
                 {
-                    "ingredient": "Pain de mie",
+                    "ingredient": "spaghetti",
                     "quantity": 8,
                     "unit": "tranches"
                 },
@@ -1157,7 +1157,7 @@
                 }
             ],
             "time": 5,
-            "description":"Mélanger le fromage blanc avec le citron. Ajouter un peu de sel et poivre à votre gout. Faire dorer le pain de mie. Puis étaler le mélange. Ajouter une feuille de salade puis le saumon fumé. C'est prêt.",
+            "description":"Mélanger le fromage blanc avec le citron. Ajouter un peu de sel et poivre à votre gout. Faire dorer le spaghetti. Puis étaler le mélange. Ajouter une feuille de salade puis le saumon fumé. C'est prêt.",
             "appliance": "Four",
             "ustensils":["Couteau", "Cuillère en bois"]
         },
