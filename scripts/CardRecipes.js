@@ -1,41 +1,41 @@
 class CardRecipes{
     constructor(){ 
         this.api = new RecipesApi('data/recipes.json');
-        this.recipesSection = document.querySelector('.section-articles'); 
+        this.recipesSection = document.querySelector('.section-articles');
+        //variables pour stocker les tableaux qu'on utilisera pour stocker les ingredinets, ustensiles et appareils
+        this.arrayRecipes = [];
+        //voici le tableau où je vais stcker en index 0 les ingredients, en index 1 les appareils, et en 2 les ustensiles
+        this.arrayTags = []; 
+        //voici le deuxieme tableau où je vais stcker en index 0 les ingredients, en index 1 les appareils, et en 2 les ustensiles
+        this.arrayTags2 = [];
+        this.arrayUstensilsTags = [];
+        this.recipe = null; 
+        //liste de variables qui stockent les modales pour le choix des tags, à savoir que l'element2 c'est la modale fermé et element la modale ouverte
+        this.containerElementsIngredient = document.querySelector(".container-elements-ingredient");
+        this.containerElements2Ingredient = document.querySelector(".container-elements2-ingredient");
+        this.containerElementsAppareils = document.querySelector(".container-elements-appareils");
+        this.containerElements2Appareils = document.querySelector(".container-elements2-appareils");
+        this.containerElementsUstensils = document.querySelector(".container-elements-ustensils");
+        this.containerElements2Ustensils = document.querySelector(".container-elements2-ustensils");
+        //liste des variables stoquants les chevrons pour l'ouverture et fermeture des modales
+        this.chevronIngredients = document.querySelectorAll(".chevron-ingredients");
+        this.chevronAppareils = document.querySelectorAll(".chevron-appareils");
+        this.chevronUstensils = document.querySelectorAll(".chevron-ustensils");
+        //liste des variables pour gerer l'ouverture des 3 modales, true modale fermé, false modale ouverte
+        this.chevronClickIngredient = true;
+        this.chevronClickAppareils = true;
+        this.chevronClickUstensils = true;
+        this.chevronClick = true;
+        //3 variables pour l'affichage de la liste de tags dans les 3 modales, ingredients, appareils, ustensils
+        this.mapIngredients = document.querySelector(".map-ingredients");
+        this.mapAppareils = document.querySelector(".map-appareils");
+        this.mapUstensils = document.querySelector(".map-ustensils");
+        this.checkInputIngredients;
+        this.checkInputAppareils;
+        this.checkInputUstensils;
     }
 
     async displayData() {
-        //variables pour stocker les tableaux qu'on utilisera pour stocker les ingredinets, ustensiles et appareils
-        let arrayRecipes = [];
-        //voici le tableau où je vais stcker en index 0 les ingredients, en index 1 les appareils, et en 2 les ustensiles
-        let arrayTags = []; arrayTags.push([]); arrayTags.push([]); arrayTags.push([]);
-        //voici le deuxieme tableau où je vais stcker en index 0 les ingredients, en index 1 les appareils, et en 2 les ustensiles
-        let arrayTags2 = []; arrayTags2.push([]); arrayTags2.push([]); arrayTags2.push([]);
-        let arrayUstensilsTags = [];
-        let recipe = null; 
-        // //liste de variables qui stockent les modales pour le choix des tags, à savoir que l'element2 c'est la modale fermé et element la modale ouverte
-        let containerElementsIngredient = document.querySelector('.container-elements-ingredient');
-        let containerElements2Ingredient = document.querySelector('.container-elements2-ingredient');
-        let containerElementsAppareils = document.querySelector('.container-elements-appareils');
-        let containerElements2Appareils = document.querySelector('.container-elements2-appareils');
-        let containerElementsUstensils = document.querySelector('.container-elements-ustensils');
-        let containerElements2Ustensils = document.querySelector('.container-elements2-ustensils');
-        //liste des variables stoquants les chevrons pour l'ouverture et fermeture des modales
-        const chevronIngredients = document.querySelectorAll('.chevron-ingredients');
-        const chevronAppareils = document.querySelectorAll('.chevron-appareils');
-        const chevronUstensils = document.querySelectorAll('.chevron-ustensils');
-        //liste des variables pour gerer l'ouverture des 3 modales, true modale fermé, false modale ouverte
-        let chevronClickIngredient = true;
-        let chevronClickAppareils = true;
-        let chevronClickUstensils = true;
-        //liste des variables pour trouver l'input dans les mune ingredients appareils et ustensiles
-        let checkInputIngredients = null;
-        let checkInputAppareils = null;
-        let checkInputUstensils = null;
-        //3 variables pour l'affichage de la liste de tags dans les 3 modales, ingredients, appareils, ustensils
-        const mapIngredients = document.querySelector('.map-ingredients');
-        const mapAppareils = document.querySelector('.map-appareils');
-        const mapUstensils = document.querySelector('.map-ustensils');
         //recuperation des données du fichier json
         const cardsRecipes = await this.api.getRecipes();
         //on map nos données récuperés pour afficher les cards avec les recettes
@@ -45,12 +45,12 @@ class CardRecipes{
             }).join('')
             
             //je créé un article qui sera la card pour chaque recette
-            recipe = document.createElement('article');
-            recipe.setAttribute('class', 'col-lg-6 col-xl-4 mb-5')
+            this.recipe = document.createElement('article');
+            this.recipe.setAttribute('class', 'col-lg-6 col-xl-4 mb-5')
     
             //je donne l'attribut id = le nom de la recette pour pouvoir apres faire le filtre via le nom de la recette
-            recipe.setAttribute('id', `${el.name}`)
-            recipe.innerHTML = `
+            this.recipe.setAttribute('id', `${el.name}`)
+            this.recipe.innerHTML = `
            <img src="/assets/images/${el.name}.jpg" alt="">
            <div class="text">
                <div class="text-1">
@@ -74,43 +74,48 @@ class CardRecipes{
            </div>`
            
            //je stocke toutes les recettes dans un tableau pour pouvoir l'utiliser aprés dans le filter de la barre de recherche
-           arrayRecipes.push(recipe)
+           this.arrayRecipes.push(this.recipe)
            
            //j'affiche les cards avec les recette dans le DOM
-           this.recipesSection.appendChild(recipe)
+           this.recipesSection.appendChild(this.recipe)
     
+           //je créé 3 tableau vides pour aprés stocker ingredients ustensils et apparails, dans mes 2 tableaux
+           this.arrayTags.push([]); this.arrayTags.push([]); this.arrayTags.push([]);
+           this.arrayTags2.push([]); this.arrayTags2.push([]); this.arrayTags2.push([]);
+
            //je stocke tous les ingredients dans un tableau, bien sur je fait attention de ne pas mettre des doublons
            el.ingredients.map(elt => {
-               if (arrayTags[0].indexOf(elt.ingredient) === -1) {
-                   return arrayTags[0].push(elt.ingredient)
+               if (this.arrayTags[0].indexOf(elt.ingredient) === -1) {
+                   return this.arrayTags[0].push(elt.ingredient)
                }
            })
            //je stocke tous les appareils dans un tableau, bien sur je fait attention de ne pas mettre des doublons
-            if (arrayTags[1].indexOf(el.appliance) === -1) {
-                return arrayTags[1].push(el.appliance)
+            if (this.arrayTags[1].indexOf(el.appliance) === -1) {
+                return this.arrayTags[1].push(el.appliance)
             }
             //je stocke tous les utensiles dans un tableau, bien sur je fait attention de ne pas mettre des doublons
             el.ustensils.map(elt => {
-                if (arrayTags[2].indexOf(elt) === -1) {
-                    return arrayTags[2].push(elt)
+                if (this.arrayTags[2].indexOf(elt) === -1) {
+                    return this.arrayTags[2].push(elt)
                 }
             })
            //je clone ce tableau car j'en aurait besoin pour la suppression des tags
-           arrayUstensilsTags = [...arrayTags[2]];
+           this.arrayUstensilsTags = [...this.arrayTags[2]];
         })
-
-        //je lance la fonciton pour la recherche des recettes par titre depuis la barre de recherhce principale
-        getRecipesBarSearch(this.recipesSection, arrayRecipes);
-        //je lance les 3 fonctions pour l'affichage des listes contenants les tags à utiliser pour les ingredients, les ustesils et les appareils
-        getListTags(arrayTags[0], arrayTags2[0], containerElementsIngredient, containerElements2Ingredient, chevronIngredients, chevronClickIngredient, mapIngredients, 'ingredients', checkInputIngredients);
-        getListTags(arrayTags[1], arrayTags2[1], containerElementsAppareils, containerElements2Appareils, chevronAppareils, chevronClickAppareils, mapAppareils,'appareils', checkInputAppareils);
-        getListTags(arrayTags[2], arrayTags2[2], containerElementsUstensils, containerElements2Ustensils, chevronUstensils, chevronClickUstensils, mapUstensils, 'ustensils', checkInputUstensils);
-        //je lance la fonction pour l'affichage des tags
-        getShowTags(this.recipesSection, arrayRecipes, cardsRecipes.recipes, arrayTags2[0], arrayTags2[1], arrayTags2[2], arrayUstensilsTags);
-        //je lance la fonction pour supprimer un tag et du coup filtrer ma section de recettes selon cette suppression
         
+        //je declare un nouveau objet algorithme-1
+        const algo1 = new Algorithme(this.recipesSection, this.arrayRecipes, cardsRecipes.recipes, this.arrayUstensilsTags)
+        //je lance la fonciton pour la recherche des recettes par titre depuis la barre de recherhce principale
+        algo1.getRecipesBarSearch();
+        //je lance les 3 fonctions pour l'affichage des listes contenants les tags à utiliser pour les ingredients, les ustesils et les appareils
+        algo1.getListTags(this.arrayTags[0], this.arrayTags2[0], this.containerElementsIngredient, this.containerElements2Ingredient, this.chevronIngredients, this.chevronClickIngredient, this.mapIngredients, 'ingredients', this.checkInputIngredients);
+        algo1.getListTags(this.arrayTags[1], this.arrayTags2[1], this.containerElementsAppareils, this.containerElements2Appareils, this.chevronAppareils, this.chevronClickAppareils, this.mapAppareils,'appareils', this.checkInputAppareils);
+        algo1.getListTags(this.arrayTags[2], this.arrayTags2[2], this.containerElementsUstensils, this.containerElements2Ustensils, this.chevronUstensils, this.chevronClickUstensils, this.mapUstensils, 'ustensils', this.checkInputUstensils);
+        //je lance la fonction pour l'affichage des tags ( a savoir que dans cette methode, j'ai aussi la fonction pour le tri et pour la suppression des tags)
+        algo1.getShowTags(this.arrayTags2[0], this.arrayTags2[1], this.arrayTags2[2], this.mapIngredients, this.mapAppareils, this.mapUstensils);        
     }
 }
 
+//JE CREE UN OBJET CARDRECIPES POUR AFFICHER MES CARDS, QUI CONTIENT AUSSI LA GESTION DE L'ALGORITHME DE RECHERHCE
 const app = new CardRecipes
 app.displayData()
