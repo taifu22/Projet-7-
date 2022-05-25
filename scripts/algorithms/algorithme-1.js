@@ -9,7 +9,7 @@ class Algorithme {
         this.searchingCriterias = [];
         this.searchingCriteria = null;
         //variables pour stocker les tags, selon l'ingredient outensil ou appareil choisi
-        this.listIngredientsWithTag = [];
+        this.listIngredientsWithTag = []; 
         this.listappliancesWithTag = [];
         this.listustensilsWithTag = [];
         //variable pour stocker les titres des recettes
@@ -29,7 +29,7 @@ class Algorithme {
     }
 
     //FUNCTION POUR LA RECHERCHE DES RECETTES PAR TITRE DANS LA BARRE DE RECHERCHE PRINCIPALE
-    getRecipesBarSearch(mapIngredients, arrayListIngredients2, mapAppareils, arrayListAppliances2) {
+    getRecipesBarSearch(mapIngredients, arrayListIngredients2, mapAppareils, arrayListAppliances2, mapUstensils, arrayListUstensils2) {
         let check = null;
     //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
     document.querySelector(".form-control").addEventListener("input", function () {
@@ -42,15 +42,20 @@ class Algorithme {
         e.preventDefault();
         this.recipesSection.innerHTML = "";
         mapIngredients.innerHTML = "";
+        this.arraySearchTags = [];
+        this.arraySearchTagsWithUstensils = [];
         //on filtre notre tableau pour afficher juste les cards qui nous interessent
         this.arrayRecipes.filter((el) => {
             //je fais une condition pour trouver mes cards par rapport à une lettre ou une chaine de caracthere présente dans le nom de la recette
-            //que j'ai mis tout à l'heure dans le id de chaque recette
+            //(que j'ai mis tout à l'heure dans le id de chaque recette), ou selon la description ou un ingredient 
             this.cardsRecipes.map(elt => {
               elt.ingredients.map(elt1 => {
+                //dans el.id j'ai le name, donc ca c'est la condition pour afficher mes recettes selon le name
                 if (el.id.toLowerCase().indexOf(check) !== -1 && el.id === elt.name) {
                   this.recipesSection.appendChild(el);
-                } else if(elt.description.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
+                } 
+                //ici je fais la condition pour l'ffichage des recettes selon la description
+                else if(elt.description.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
                   this.recipesSection.appendChild(el);
                     let ingredient = elt.ingredients.map((el) => {
                       return el.ingredient;
@@ -58,33 +63,47 @@ class Algorithme {
                     let appliance = elt.appliance;
                     ingredient.unshift(appliance);
                     this.arraySearchTags.push(ingredient);
-                } else if (elt1.ingredient.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
+                    let ustensils = elt.ustensils.map((elt2) => {
+                      console.log(elt2);
+                      return elt2
+                    });
+                    ustensils.map(elt3 => {
+                      this.arraySearchTagsWithUstensils.push(elt3)
+                    })
+                } 
+                //enfin ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
+                else if (elt1.ingredient.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
                   this.recipesSection.appendChild(el);                  
                 }
               })
             }) 
         })
+        /*je lance mes fonctions pour le tri et l'affichage des elements ingredients,appareils et ustensils, selon la value de 
+        l'input, du coup les recettes triées*/
         this.getSortListTagsINgredients(this.arraySearchTags);
         this.getSortListTagsAppliances(this.arraySearchTags);
-        this.getSortListTagsUstensils(this.arraySearchTags)
+        this.getSortListTagsUstensils(this.arraySearchTagsWithUstensils)
         this.getNewShowListTags(mapIngredients, arrayListIngredients2, this.listIngredientsWithTag)
         this.getNewShowListTags(mapAppareils, arrayListAppliances2, this.listappliancesWithTag)
+        this.getNewShowListTags(mapUstensils, arrayListUstensils2, this.listustensilsWithTag)
     })
     }
 
     //FONCTION POUR L'AFFICHAGE DES LA LISTE DES TAGS, DANS LE MENU DES INGREDIENTS, USTENSILS, ET APPLIANCES
-    getListTags( arrayListTags, arrayListTags2, containerElements, containerElements2, chevron, chevronClick, map, tag, checkInput) {
+    getListTags( arrayTags, arrayTags2, containerElements, containerElements2, chevron, chevronClick, mapelement, tag, checkInput) {
     let pIngredient = null;
-    //on map notre array avec la liste de tous les ingredients, et on l'affiche dans la liste des ingredients
-      arrayListTags.map((el) => {
+    /*on map notre array avec la liste de tous les ingredients, et on l'affiche dans la liste des ingredients,ustensils, appliances
+    a savoir que c'est une fonction qu'on utilisera 3 fois, une pour les ingredinets, une pour les ustensils, et une pour les appliances
+    ces 3 fonctions sont appelé dans la class CardRecipes, et en argument on mettra les bonnes info pour ingredients, ustensils et appliance */
+      arrayTags.map((el) => {
       pIngredient = document.createElement("li");
       pIngredient.setAttribute("class","li-ingredient-ustensils-appliances list-group")
       pIngredient.setAttribute("id", tag);
       pIngredient.innerHTML = el;
-      arrayListTags2.push(pIngredient);
-      map.appendChild(pIngredient);
+      arrayTags2.push(pIngredient);
+      mapelement.appendChild(pIngredient);
     });
-    //j'affiche la modale dans l'input du choix pour la recherche selon les ingredients
+    //j'affiche la modale dans l'input du choix pour la recherche selon l'element 
     chevron.forEach((btn) =>
       btn.addEventListener("click", (e) => {
         if (chevronClick) {
@@ -97,32 +116,33 @@ class Algorithme {
           chevronClick = true;
         }
         e.stopPropagation()
-        this.getFilterInput(checkInput, map, arrayListTags2, tag)
+        //je lance la fonction pour filtrer nos 3 menus selon la value de l'input
+        this.getFilterInput(checkInput, mapelement, arrayTags2, tag)
       })
     );
     }
 
-    //FUNCTION POUR FILTRER NOTRE MENU INGREDIENT, OU USTENSIL, OU aPPAREIL SELON LA VALUE DE L'INPUT
-    getFilterInput(checkInput, map, arrayListTags2, tag){
-    //je recupere l'element input correspondant a mon tag (ingredient, ustensils ou appareil) et j'affiche mes tags selon l'input  
+    //FUNCTION POUR FILTRER NOTRE MENU INGREDIENT, OU USTENSIL, OU APPAREIL SELON LA VALUE DE L'INPUT
+    getFilterInput(checkInput, mapelement, arrayTags2, tag){
+    /*je recupere l'element input correspondant a mon tag (ingredient, ustensils ou appareil) et j'affiche mes tags selon l'input  
+    Cette fonction aussi est utilisé 3 fois pour chaque menu (ingredient, ustensils ou appareils)*/
     document
       .querySelector(`.input-${tag}`)
       .addEventListener("input", function () {
         checkInput = this.value;
         map.innerHTML = "";
-        arrayListTags2.filter((el) => {
+        arrayTags2.filter((el) => {
           if (el.textContent.toLowerCase().indexOf(checkInput) !== -1) {
-            map.appendChild(el);
+            mapelement.appendChild(el);
           }
         });
       });
     }
 
     //FONCTION POUR L'AFFICHAGE DU TAG CHOISI
-    getShowTags(arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, mapIngredients, mapAppareils, mapUstensils) {
+    getShowTags(arrayTags2Ingredients, arrayTags2Appliances, arrayTags2Ustensils, mapIngredients, mapAppareils, mapUstensils) {
     let elementSearc;
     let newelementSearc;
-    //arrayRecipes2 = [...this.arrayRecipes];
     //je recupere ma liste des tags (ingredients, ustensils, appareils)
     let liIngredient = document.querySelectorAll(".li-ingredient-ustensils-appliances");
     //je donne un evenement click à chaque tag
@@ -150,18 +170,17 @@ class Algorithme {
         //je vide ma section pour trier aprés selon l'ingrédient de mon tag
         this.recipesSection.innerHTML = "";
         //je lance la fonction (declaré en bas) pour le tri de ma section recettes selon le tag choisi
-        this.getSortSectionRecipes(arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, mapIngredients, mapAppareils, mapUstensils);
+        this.getSortSectionRecipes(arrayTags2Ingredients, arrayTags2Appliances, arrayTags2Ustensils, mapIngredients, mapAppareils, mapUstensils);
         //je lance la fonction (declaré en bas) pour supprimer un tag existant et du coup trier selon cette suppression
-        this.DeleteTags(arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, mapIngredients, mapAppareils, mapUstensils);
+        this.DeleteTags(arrayTags2Ingredients, arrayTags2Appliances, arrayTags2Ustensils, mapIngredients, mapAppareils, mapUstensils);
         //console.log(chevronClickIngredient);
       })
     );
   }
 
   //FONCTION POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (INGREDIENT)
-  // ici j'affiche pas dans le menu ustensils les ustensils restants car j'ai créé une seul fonction qui me fera le job pour les 3 (ingredients ustensils et appliances)
      getSortListTagsINgredients(array) {
-    /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient ou apareil
+    /*je stcke dans un tableau juste les ingredients de toutes les recettes dont j'ai choisi un ingredient ou apareil, ou ustensil
       bien sur je reinitialise le tableau d'avant*/
     this.listIngredientsWithTag = [];
     array.map((el) => {
@@ -178,7 +197,7 @@ class Algorithme {
 
   //FONCTION POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (APPAREIL)
     getSortListTagsAppliances(array) {
-    /*je stcke dans un tableau juste les appareils de toutes les recettes dont j'ai choisi un ingredient ou apareil
+    /*je stcke dans un tableau juste les appareils de toutes les recettes dont j'ai choisi un ingredient ou apareil ou ustensil
       bien sur je reinitialise le tableau d'avant*/
     this.listappliancesWithTag = [];
     array.map((el) => {
@@ -190,12 +209,11 @@ class Algorithme {
         }
       });
     });
-    console.log(this.listappliancesWithTag);
   }
   
   //FONCTION POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (USTENSIL)
     getSortListTagsUstensils(array) {
-    /*je stcke dans un tableau juste les utensils de toutes les recettes dont j'ai choisi un ingredient ou apareil
+    /*je stocke dans un tableau juste les utensils de toutes les recettes dont j'ai choisi un ingredient ou apareil ou ustensil
     bien sur je reinitialise le tableau d'avant*/
     this.listustensilsWithTag = [];
     array.map(el => {
@@ -204,12 +222,13 @@ class Algorithme {
   }
   
   //FONCTION POUR L'AFFICHAGE DE LA LISTE DE TAGS RESTANTS APRES EN AVOIR CHOISI UN
-    getNewShowListTags(map, arrayListTags2, listTagssWithTag) {
-    map.innerHTML = "";
+  /*du coup cette fonction sera appelé 3 fois, pour chaque menu (ingredients, appareils ou ustensils)*/
+    getNewShowListTags(mapelement, arrayTags2, listTagssWithTag) {
+    mapelement.innerHTML = "";
     listTagssWithTag.map((el) => {
-      arrayListTags2.map((elt) => {
+      arrayTags2.map((elt) => {
         if (elt.textContent === el) {
-          map.appendChild(elt);
+          mapelement.appendChild(elt);
         }
       });
     });
@@ -230,7 +249,7 @@ class Algorithme {
   }
 
   //FONCTION POUR REINITIALISER LA SECTION DES RECIPES SI AUCUN TAG N'EST SELECTIONNE
-    resetSectionRecipes(arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, mapIngredients, mapAppareils, mapUstensils ) {
+    resetSectionRecipes(arrayTags2Ingredients, arrayTags2Appliances, arrayTags2Ustensils, mapIngredients, mapAppareils, mapUstensils ) {
     if (this.searchingCriterias.length <= 0) {
       mapIngredients.innerHTML = "";
       mapAppareils.innerHTML = "";
@@ -239,20 +258,20 @@ class Algorithme {
       this.arrayRecipes.map((el) => {
         this.recipesSection.appendChild(el);
       });
-      arrayListIngredients2.map((elt) => {
+      arrayTags2Ingredients.map((elt) => {
         mapIngredients.appendChild(elt);
       });
-      arrayListAppliances2.map((elt) => {
+      arrayTags2Appliances.map((elt) => {
         mapAppareils.appendChild(elt);
       });
-      arrayListUstensils2.map((elt) => {
+      arrayTags2Ustensils.map((elt) => {
         mapUstensils.appendChild(elt);
       });
       this.arrayListIngredientsUstensilsAppliances = [];
       this.arrayListAllTitles = [];
-      arrayListIngredients2 = [];
-      arrayListAppliances2 = [];
-      arrayListUstensils2 = [];
+      arrayTags2Ingredients = [];
+      arrayTags2Appliances = [];
+      arrayTags2Ustensils = [];
     }
   }
 
@@ -335,15 +354,19 @@ class Algorithme {
         }
     })
     })
+    /*donc en fin de fonction, j'ai un tableau avec en index 1 les appareils, puis les autres index c'est des ingredients, et en dernier 
+    index un tableau avec le name de la recette.
+    Puis un deuxieme tableau où j'ai juste les ustensils*/
   }
   
   //JE FAIS UNE FONCTION AVEC UNE CONDITION POUR TRIER MA SECTION DE RECETTES SI J'AI UN SEARCHINGCRITERIA ACTIVE, C'EST A DIRE SI J'AI CHOISI UN TAG
-    getSortSectionRecipes(arrayListIngredients2, arrayListAppliances2, arrayListUstensils2, mapIngredients, mapAppareils, mapUstensils ) {
+    getSortSectionRecipes(arrayTags2Ingredients, arrayaTgs2Appliances, arrayaTgs2Ustensils, mapIngredients, mapAppareils, mapUstensils ) {
     if (this.searchingCriteria !== null) {
       //je lance ma fonction pour creer et trier le tableau qui contient mes tags en cours
       this.getSortArrayTags(this.searchingCriteria);
-      //je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
-      //bien sur à chaque tag choisi le tableau doit etre reinitialisé
+      /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient, appliances ou ustensils selectionné,
+      bien sur à chaque tag choisi le tableau doit etre reinitialisé (a savoir que dans le dernier index de arrayListIngredientsUstensilsAppliances
+      j'ai stocké le title de chaque recette)*/
       this.arrayListAllTitles = [];
       this.arrayListIngredientsUstensilsAppliances.map((el) => {
         this.arrayListAllTitles.push(el[el.length - 1]);
@@ -354,13 +377,13 @@ class Algorithme {
       this.getSortListTagsINgredients(this.arrayListIngredientsUstensilsAppliances);
       this.getSortListTagsAppliances(this.arrayListIngredientsUstensilsAppliances);
       this.getSortListTagsUstensils(this.arrayListUsetensilsInArray);
-      //je lance la fonction pour afficher ma liste des ingredients avec ceux restants, en ayant choisi l'ingredinet d'avant
-      this.getNewShowListTags( mapIngredients, arrayListIngredients2, this.listIngredientsWithTag);
-      //je lance la fonction pour afficher ma liste des appareils avec ceux restants, en ayant choisi l'ingredinet d'avant
-      this.getNewShowListTags( mapAppareils, arrayListAppliances2, this.listappliancesWithTag);
-      //je lance la fonction pour afficher ma liste des ustensils avec ceux restants, en ayant choisi l'ingredinet d'avant
-      this.getNewShowListTags(mapUstensils, arrayListUstensils2, this.listustensilsWithTag);
-      //je lance la fonction pour afficher ma section du coup juste les recettes de l'ingrédient dont on a créé le tag
+      //je lance la fonction pour afficher ma liste des ingredients avec ceux restants, en ayant choisi le tag d'avant
+      this.getNewShowListTags( mapIngredients, arrayTags2Ingredients, this.listIngredientsWithTag);
+      //je lance la fonction pour afficher ma liste des appareils avec ceux restants, en ayant choisi le tag d'avant
+      this.getNewShowListTags( mapAppareils, arrayaTgs2Appliances, this.listappliancesWithTag);
+      //je lance la fonction pour afficher ma liste des ustensils avec ceux restants, en ayant choisi le tag d'avant
+      this.getNewShowListTags(mapUstensils, arrayaTgs2Ustensils, this.listustensilsWithTag);
+      //je lance la fonction pour afficher ma section du coup juste les recettes de l'element (tag) dont on a créé le tag
       this.getShowSectionRecipes();
       //je fait disparaitre la liste des ingredients et des appareils une fois le traitement de triage des recettes terminé
       //containerElementsIngredient.style.display = 'block';

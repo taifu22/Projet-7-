@@ -1,5 +1,5 @@
 class CardRecipes{
-    constructor(){ 
+    constructor(){  
         this.api = new RecipesApi('data/recipes.json');
         this.recipesSection = document.querySelector('.section-articles');
         //variables pour stocker les tableaux qu'on utilisera pour stocker les ingredinets, ustensiles et appareils
@@ -79,39 +79,41 @@ class CardRecipes{
            //j'affiche les cards avec les recette dans le DOM
            this.recipesSection.appendChild(this.recipe)
     
-           //je créé 3 tableau vides pour aprés stocker ingredients ustensils et apparails, dans mes 2 tableaux
+           //je créé 3 tableau vides (pour arrayTags et arrayTags2) pour aprés stocker ingredients (index0) ustensils (index2) et apparails (index1)
+           //dans arrayTags j'ai 3 tableau, où à l'intérieur je stocke en string chaque element
+           //dans le arrayTags2 j'ai toujours 3 tableau où je stocke mes element sous forme chacun de balise li
            this.arrayTags.push([]); this.arrayTags.push([]); this.arrayTags.push([]);
            this.arrayTags2.push([]); this.arrayTags2.push([]); this.arrayTags2.push([]);
 
-           //je stocke tous les ingredients dans un tableau, bien sur je fait attention de ne pas mettre des doublons
+           //je stocke tous les ingredients dans le tableau arrayTags en index0, bien sur je fait attention de ne pas mettre des doublons
            el.ingredients.map(elt => {
                if (this.arrayTags[0].indexOf(elt.ingredient) === -1) {
                    return this.arrayTags[0].push(elt.ingredient)
                }
            })
-           //je stocke tous les appareils dans un tableau, bien sur je fait attention de ne pas mettre des doublons
+           //je stocke tous les appareils dans le tableau arrayTags en index1, bien sur je fait attention de ne pas mettre des doublons
             if (this.arrayTags[1].indexOf(el.appliance) === -1) {
                 return this.arrayTags[1].push(el.appliance)
             }
-            //je stocke tous les utensiles dans un tableau, bien sur je fait attention de ne pas mettre des doublons
+            //je stocke tous les utensiles dans le tableau arrayTags en index2, bien sur je fait attention de ne pas mettre des doublons
             el.ustensils.map(elt => {
                 if (this.arrayTags[2].indexOf(elt) === -1) {
                     return this.arrayTags[2].push(elt)
                 }
             })
-           //je clone ce tableau car j'en aurait besoin pour la suppression des tags
+           //je clone le tableau arrayTags2 (element li) car j'en aurait besoin pour la suppression des tags
            this.arrayUstensilsTags = [...this.arrayTags[2]];
         })
         
         //je declare un nouveau objet algorithme-1
         const algo1 = new Algorithme(this.recipesSection, this.arrayRecipes, cardsRecipes.recipes, this.arrayUstensilsTags)
-        //je lance la fonciton pour la recherche des recettes par titre depuis la barre de recherhce principale
-        algo1.getRecipesBarSearch(this.mapIngredients, this.arrayTags2[0], this.mapAppareils, this.arrayTags2[1]);
+        //je lance la fonciton pour la recherche des recettes par titre/ingredient/description, depuis la barre de recherhce principale
+        algo1.getRecipesBarSearch(this.mapIngredients, this.arrayTags2[0], this.mapAppareils, this.arrayTags2[1], this.mapUstensils, this.arrayTags2[2]);
         //je lance les 3 fonctions pour l'affichage des listes contenants les tags à utiliser pour les ingredients, les ustesils et les appareils
         algo1.getListTags(this.arrayTags[0], this.arrayTags2[0], this.containerElementsIngredient, this.containerElements2Ingredient, this.chevronIngredients, this.chevronClickIngredient, this.mapIngredients, 'ingredients', this.checkInputIngredients);
         algo1.getListTags(this.arrayTags[1], this.arrayTags2[1], this.containerElementsAppareils, this.containerElements2Appareils, this.chevronAppareils, this.chevronClickAppareils, this.mapAppareils,'appareils', this.checkInputAppareils);
         algo1.getListTags(this.arrayTags[2], this.arrayTags2[2], this.containerElementsUstensils, this.containerElements2Ustensils, this.chevronUstensils, this.chevronClickUstensils, this.mapUstensils, 'ustensils', this.checkInputUstensils);
-        //je lance la fonction pour l'affichage des tags ( a savoir que dans cette methode, j'ai aussi la fonction pour le tri et pour la suppression des tags)
+        //je lance la fonction pour le tri et l'affichage des tags ( a savoir que dans cette methode, j'ai aussi la fonction pour la suppression des tags)
         algo1.getShowTags(this.arrayTags2[0], this.arrayTags2[1], this.arrayTags2[2], this.mapIngredients, this.mapAppareils, this.mapUstensils);        
     }
 }
