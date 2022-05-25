@@ -107,13 +107,13 @@ class CardRecipes{
         
         //je declare un nouveau objet algorithme-1
         const algo1 = new Algorithme(this.recipesSection, this.arrayRecipes, cardsRecipes.recipes, this.arrayUstensilsTags)
-        //je lance la fonciton pour la recherche des recettes par titre/ingredient/description, depuis la barre de recherhce principale
+        //je lance la methode pour la recherche des recettes par titre/ingredient/description, depuis la barre de recherhce principale
         algo1.getRecipesBarSearch(this.mapIngredients, this.arrayTags2[0], this.mapAppareils, this.arrayTags2[1], this.mapUstensils, this.arrayTags2[2]);
-        //je lance les 3 fonctions pour l'affichage des listes contenants les tags à utiliser pour les ingredients, les ustesils et les appareils
+        //je lance les 3 methodes pour l'affichage des listes contenants les tags à utiliser pour les ingredients, les ustesils et les appareils
         algo1.getListTags(this.arrayTags[0], this.arrayTags2[0], this.containerElementsIngredient, this.containerElements2Ingredient, this.chevronIngredients, this.chevronClickIngredient, this.mapIngredients, 'ingredients', this.checkInputIngredients);
         algo1.getListTags(this.arrayTags[1], this.arrayTags2[1], this.containerElementsAppareils, this.containerElements2Appareils, this.chevronAppareils, this.chevronClickAppareils, this.mapAppareils,'appareils', this.checkInputAppareils);
         algo1.getListTags(this.arrayTags[2], this.arrayTags2[2], this.containerElementsUstensils, this.containerElements2Ustensils, this.chevronUstensils, this.chevronClickUstensils, this.mapUstensils, 'ustensils', this.checkInputUstensils);
-        //je lance la fonction pour le tri et l'affichage des tags ( a savoir que dans cette methode, j'ai aussi la fonction pour la suppression des tags)
+        //je lance la methode pour le tri et l'affichage des tags ( a savoir que dans cette methode, j'ai aussi la fonction pour la suppression des tags)
         algo1.getShowTags(this.arrayTags2[0], this.arrayTags2[1], this.arrayTags2[2], this.mapIngredients, this.mapAppareils, this.mapUstensils);        
     }
 }
