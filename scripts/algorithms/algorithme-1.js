@@ -28,21 +28,22 @@ class Algorithme {
         this.ePathId;
     }
 
-   //METHODE POUR TRIER MES 3 MENU ELEMENTS 5INGREDIENTS APPLIANCES ET USTENSILS°, PAR RAPPORT A LA VALUE DE L'INPUT
+   //METHODE POUR TRIER MES 3 MENU ELEMENTS, INGREDIENTS APPLIANCES ET USTENSILS, PAR RAPPORT A LA VALUE DE L'INPUT
    //cette function on l'utilisera dans celle juste en bas
    getSortElementsInput(ingredients, appliances, ustensils){
-      let ingredient = ingredients.filter((elt2) => {
+      let ingredient = ingredients.map((elt2) => {
         return elt2.ingredient;
       });
       let appliance = appliances;
       ingredient.unshift(appliance);
-      this.arraySearchTags.push(ingredient);
-      let ustensil = ustensils.filter((elt2) => {
+      this.arraySearchTags.push(ingredient); 
+      let ustensil = ustensils.map((elt2) => {
         return elt2
       });
-      ustensil.filter(elt3 => {
+      ustensil.map(elt3 => {
         this.arraySearchTagsWithUstensils.push(elt3)
       })
+      console.log(this.arraySearchTags);
    }
 
     //METHODE POUR LA RECHERCHE DES RECETTES PAR TITRE, INGREDIENT OU DESCRIPTION DANS LA BARRE DE RECHERCHE PRINCIPALE
@@ -50,7 +51,7 @@ class Algorithme {
         let check = null;
         //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
         document.querySelector(".form-control").addEventListener("input", function () {
-            check = this.value;
+            check = this.value.toLowerCase();
         });
         //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer/afficher juste les recettes
         //dont le name est = à la value check de mon input
@@ -58,33 +59,33 @@ class Algorithme {
         formulaire.addEventListener("submit", (e) => {
             e.preventDefault();
             this.recipesSection.innerHTML = "";
-            //this.arraySearchTags = [];
-            //this.arraySearchTagsWithUstensils = [];
+            this.arraySearchTags = [];
+            this.arraySearchTagsWithUstensils = [];
             //on filtre notre tableau pour afficher juste les cards qui nous interessent
             this.arrayRecipes.filter((el) => {
                 //je fais une condition pour trouver mes cards par rapport à une lettre ou une chaine de caracthere présente dans le nom de la recette
                 //(que j'ai mis tout à l'heure dans le id de chaque recette), ou selon la description ou un ingredient 
                 this.cardsRecipes.filter(elt => {
-                  elt.ingredients.filter(elt1 => {
+                  elt.ingredients.filter(elt1 => { 
                     //dans el.id j'ai le name, donc ca c'est la condition pour afficher mes recettes selon le name
-                    if (el.id.toLowerCase().indexOf(check) !== -1 && el.id === elt.name) {
-                      this.recipesSection.appendChild(el);
-                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
-                    } 
-                    //ici je fais la condition pour l'ffichage des recettes selon la description
-                    else if(elt.description.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
-                      this.recipesSection.appendChild(el);
-                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
-                    } 
-                    //enfin ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
-                    else if (elt1.ingredient.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
+                  if (el.id.toLowerCase().indexOf(check) !== -1 && el.id === elt.name) {
+                    this.recipesSection.appendChild(el);
+                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
+                  } 
+                  //ici je fais la condition pour l'ffichage des recettes selon la description
+                  else if(elt.description.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
+                    this.recipesSection.appendChild(el);
+                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
+                  }
+                  //enfin si ma barre de recherche est vide, donc input vide, je charcge tout mon contenu des 3 menus
+                  else if (check === "") {
+                    this.recipesSection.appendChild(el);
+                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
+                  }
+                  //enfin ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
+                  else if (elt1.ingredient.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
                       this.recipesSection.appendChild(el);  
                       this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);              
-                    }
-                    //enfin si ma barre de recherche est vide, donc input vide, je charcge tout mon contenu des 3 menus
-                    else if (check === "") {
-                      this.recipesSection.appendChild(el);
-                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
                     }
                   })
                 }) 
@@ -195,7 +196,6 @@ class Algorithme {
       this.listIngredientsWithTag = [];
       array.map((el) => {
         el.map((elt) => {
-          //console.log(elt);
           if (elt !== el[0]) {
             if ( this.listIngredientsWithTag.indexOf(elt) === -1) {
               this.listIngredientsWithTag.push(elt); 
