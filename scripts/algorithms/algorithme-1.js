@@ -26,67 +26,84 @@ class Algorithme {
         this.arrayListIngredientsUstensilsAppliances = [];
         //variable qui stocke la value du tag choisi (entre ingredients, appareils et ustensils)
         this.ePathId;
+        //variable pour declarer que je suis en train de chercher un tag apres aoir fait une recherche dans la research bar
+        this.activeResearchBar = false;
+        //variable pour stocker l'input de ma research-bar
+        this.check = null;
     }
 
    //METHODE POUR TRIER MES 3 MENU ELEMENTS, INGREDIENTS APPLIANCES ET USTENSILS, PAR RAPPORT A LA VALUE DE L'INPUT
    //cette function on l'utilisera dans celle juste en bas
-   getSortElementsInput(ingredients, appliances, ustensils){
-      let ingredient = ingredients.map((elt2) => {
-        return elt2.ingredient;
+   getSortElementsInput(ingredients, appliances, ustensils, names){
+      let name = [names];
+      let ingredient = ingredients.map((el2) => {
+        return el2.ingredient;
       });
       let appliance = appliances;
-      ingredient.unshift(appliance);
-      this.arraySearchTags.push(ingredient); 
-      let ustensil = ustensils.map((elt2) => {
-        return elt2
+      let ustensil = ustensils.map((el) => {
+        return el
       });
-      ustensil.map(elt3 => {
-        this.arraySearchTagsWithUstensils.push(elt3)
-      })
-      console.log(this.arraySearchTags);
+      ingredient.unshift(ustensil);
+      ingredient.unshift(appliance);
+      ingredient.push(name);
+      this.arraySearchTags.push(ingredient);
+      //je créé un autre tableau où cette fois je melange les ustensils avec les ingredients et appareils
+        let ustensil2 = ustensils.map((el) => {
+          return el;
+        });
+        ustensil2.map(el => {
+          return this.arrayListUsetensilsInArray.push(el)
+        })
    }
 
     //METHODE POUR LA RECHERCHE DES RECETTES PAR TITRE, INGREDIENT OU DESCRIPTION DANS LA BARRE DE RECHERCHE PRINCIPALE
     getRecipesBarSearch(mapIngredients, arrayTags2Ingredients, mapAppareils, arrayTags2Appliances, mapUstensils, arrayTags2Ustensils) {
-        let check = null;
         //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
+        let check1 = null;
         document.querySelector(".form-control").addEventListener("input", function () {
-            check = this.value.toLowerCase();
+            check1 = this.value;
         });
         //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer/afficher juste les recettes
         //dont le name est = à la value check de mon input
         const formulaire = document.querySelector(".formulaire");
         formulaire.addEventListener("submit", (e) => {
             e.preventDefault();
+            this.check = check1
             this.recipesSection.innerHTML = "";
             this.arraySearchTags = [];
             this.arraySearchTagsWithUstensils = [];
+            this.arrayListUsetensilsInArra = [];
+            this.activeResearchBar = true
+            this.searchingCriterias.push(check1);
             //on filtre notre tableau pour afficher juste les cards qui nous interessent
             this.arrayRecipes.filter((el) => {
                 //je fais une condition pour trouver mes cards par rapport à une lettre ou une chaine de caracthere présente dans le nom de la recette
                 //(que j'ai mis tout à l'heure dans le id de chaque recette), ou selon la description ou un ingredient 
-                this.cardsRecipes.filter(elt => {
-                  elt.ingredients.filter(elt1 => { 
+                this.cardsRecipes.map(elt => {
+                  elt.ingredients.map(elt1 => { 
                     //dans el.id j'ai le name, donc ca c'est la condition pour afficher mes recettes selon le name
-                  if (el.id.toLowerCase().indexOf(check) !== -1 && el.id === elt.name) {
+                  if (el.id.indexOf(check1) !== -1 && el.id === elt.name) {
                     this.recipesSection.appendChild(el);
-                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
+                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
                   } 
                   //ici je fais la condition pour l'ffichage des recettes selon la description
-                  else if(elt.description.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
+                  else if(elt.description.indexOf(check1)!== -1 && el.id === elt.name) {
+                    console.log('description');
                     this.recipesSection.appendChild(el);
-                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
+                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
                   }
                   //enfin si ma barre de recherche est vide, donc input vide, je charcge tout mon contenu des 3 menus
-                  else if (check === "") {
+                  else if (this.check === "") {
                     this.recipesSection.appendChild(el);
-                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);
+                    //this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
+                    this.searchingCriterias = [];
                   }
                   //enfin ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
-                  else if (elt1.ingredient.toLowerCase().indexOf(check)!== -1 && el.id === elt.name) {
+                  else if (elt1.ingredient.indexOf(check1)!== -1 && el.id === elt.name) {
+                    console.log('ingredients');
                       this.recipesSection.appendChild(el);  
-                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils);              
-                    }
+                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);              
+                  }
                   })
                 }) 
             })
@@ -94,7 +111,7 @@ class Algorithme {
             l'input, du coup les recettes triées*/
             this.getSortListTagsINgredients(this.arraySearchTags);
             this.getSortListTagsAppliances(this.arraySearchTags);
-            this.getSortListTagsUstensils(this.arraySearchTagsWithUstensils)
+            this.getSortListTagsUstensils(this.arrayListUsetensilsInArray)
             this.getNewShowListTags(mapIngredients, arrayTags2Ingredients, this.listIngredientsWithTag)
             this.getNewShowListTags(mapAppareils, arrayTags2Appliances, this.listappliancesWithTag)
             this.getNewShowListTags(mapUstensils, arrayTags2Ustensils, this.listustensilsWithTag)
@@ -203,6 +220,7 @@ class Algorithme {
           }
         });
       });
+      //console.log(this.listIngredientsWithTag);
     }
 
   //METHODE POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (APPAREIL)
@@ -219,6 +237,7 @@ class Algorithme {
           }
         });
       });
+      //console.log(this.listappliancesWithTag);
     }
   
   //METHODE POUR STOCKER DANS UN TABLEAU JUSTE LE TAG CHOISI (USTENSIL)
@@ -227,8 +246,11 @@ class Algorithme {
       bien sur je reinitialise le tableau d'avant*/
       this.listustensilsWithTag = [];
       array.map(el => {
-        return this.listustensilsWithTag.push(el)
+        if (this.listustensilsWithTag.indexOf(el) === -1) {
+          return this.listustensilsWithTag.push(el) 
+        }
       })
+      //console.log(this.listustensilsWithTag);
     }
   
   //METHODE POUR L'AFFICHAGE DE LA LISTE DE TAGS RESTANTS APRES EN AVOIR CHOISI UN
@@ -286,94 +308,99 @@ class Algorithme {
     }
 
   //METHODE POUR REMPLIR MON TABLEAUX QUI M'AFFICHERA ENSUITE LES RECETTES DONT J'AI LES TAGS EN COURS
-    getSortArrayTags(value) {
+    getSortArrayTags() {
+      console.log(this.searchingCriterias);
       /*je stocke les appareils/ingredients et le name(dans un array) de chaque recette dans notre 'arrayListIngredientsUstensilsAppliances'
         mais avant je pense bien à reinitialiser ce tableau car sinon à chaque fois, mon tableau ajoute des doublons
         Ce tableau du coup contient les recettes dont on a choisi un ingredients ustensils ou appareil*/
-      this.arraySearchTags = [];
-      this.cardsRecipes.map((el) => {
-        let name = [el.name];
-        let ingredient = el.ingredients.map((el) => {
-          return el.ingredient;
-        });
-        let appliance = el.appliance;
-        let ustensils = el.ustensils.map((el) => {
-          return el;
-        });
-        ingredient.unshift(appliance);
-        ingredient.unshift(ustensils);
-        ingredient.push(name);
-        this.arraySearchTags.push(ingredient);
-      });
-      //je créé un autre tableau où cette fois je melange les ustensils avec les ingredients et appareils
-      this.arraySearchTagsWithUstensils = [];
-      this.cardsRecipes.map(el => {
-        let name = [el.name];
-        let ingredient = el.ingredients.map((el) => {
-          return el.ingredient;
-        });
-        let appliance = el.appliance;
-        let ustensils = el.ustensils.map((el) => {
-          return el;
-        });
-        ingredient.unshift(appliance)
-        ustensils.map(el => {
-          return ingredient.unshift(el)
-        })
-        ingredient.push(name);
-        this.arraySearchTagsWithUstensils.push(ingredient)
-      })
-      /*je crée une fonction pour pouvoir verifier si les elements de SearchingCriterias (les tags en cours), sont bien presents, dans un index
-        des recettes en cours d'affichage (arraySearchTags)*/
-      function isSubsetOf(set, subset) {
-        for (let i = 0; i < set.length; i++) {
-          if (subset.indexOf(set[i]) == -1) {
-            return false;
-          }
-        }
-        return true;
-      }
-      /*donc ici je push dans mon arrayListIngredientsUstensilsAppliances juste les recettes lié au tag, que ce soit ingredient, appareil ou ustensil*/
-      this.arrayListIngredientsUstensilsAppliances = [];
-      this.arraySearchTagsWithUstensils.map(el => {
-        const result = isSubsetOf(this.searchingCriterias, el);
-        if (result !== false || (result !== false && el[0].includes(value)!== false)) {
-          return this.arrayListIngredientsUstensilsAppliances.push(el);
-        }
-      });
-      //maintenant je sépare les ustensils de mes ingredients et appareils, puis je les metes dans un tableau independent
-      this.arrayListUsetensilsInArray = []
-      this.arrayUstensilsTags.map(el => {
-        if (el !== undefined) {
-          this.arrayListIngredientsUstensilsAppliances.map(elt => {
-            if (elt.indexOf(el) !== -1) {
-              this.arrayListUsetensilsInArray.push(el)
-            }
+          this.arraySearchTags = [];
+          this.cardsRecipes.map((el) => {
+            let name = [el.name];
+            let ingredient = el.ingredients.map((el) => {
+              return el.ingredient;
+            });
+            let appliance = el.appliance;
+            let ustensils = el.ustensils.map((el) => {
+              return el.toLowerCase();
+            });
+            ingredient.unshift(appliance);
+            ingredient.unshift(ustensils);
+            ingredient.push(name);
+            this.arraySearchTags.push(ingredient);
+          });
+          //je créé un autre tableau où cette fois je melange les ustensils avec les ingredients et appareils
+          this.arraySearchTagsWithUstensils = [];
+          this.cardsRecipes.map(el => {
+            let name = [el.name];
+            let description = el.description;
+            let ingredient = el.ingredients.map((el) => {
+              return el.ingredient;
+            });
+            let appliance = el.appliance;
+            let ustensils = el.ustensils.map((el) => {
+              return el;
+            });
+            ingredient.unshift(appliance)
+            ustensils.map(el => {
+              return ingredient.unshift(el)
+            })
+            ingredient.push(description)
+            ingredient.push(name);
+            this.arraySearchTagsWithUstensils.push(ingredient)
           }) 
-        }
-      })
-      //maintenant je supprime les ustensils de mon 'arrayListIngredientsUstensilsAppliances'
-      this.arrayListUsetensilsInArray.map(elt => {
-        this.arrayListIngredientsUstensilsAppliances.filter(el => {
-          if (el.indexOf(elt) !== -1 ) {
-              for(var i = el.length-1 ; i >=0 ; i--){
-                  if (el[i] === elt) {
-                      el.splice(i,1);
-                  }
+          /*je crée une fonction pour pouvoir verifier si les elements de SearchingCriterias (les tags en cours), sont bien presents, dans un index
+            des recettes en cours d'affichage (arraySearchTags)*/
+            function isSubsetOf(set, subset) {
+              for (let i = 0; i < set.length; i++) {
+                if (subset.indexOf(set[i]) == -1 && (subset[subset.length -2].indexOf(set[i]) == -1) && (subset[subset.length -1][0].indexOf(set[i]) == -1)) {
+                  return false;
+                } 
               }
-          }
-      })
-      })
-      /*donc en fin de fonction, j'ai un tableau avec en index 1 les appareils, puis les autres index c'est des ingredients, et en dernier 
-      index un tableau avec le name de la recette.
-      Puis un deuxieme tableau où je melange les ustensils avec les appareils et ingredients*/
+              return true;
+            }
+            /*donc ici je push dans mon arrayListIngredientsUstensilsAppliances juste les recettes lié au tag, que ce soit ingredient, appareil ou ustensil*/
+            this.arrayListIngredientsUstensilsAppliances = [];
+            this.arraySearchTagsWithUstensils.map(el => {
+              const result = isSubsetOf(this.searchingCriterias, el);
+
+              if (result !== false ) {
+                return this.arrayListIngredientsUstensilsAppliances.push(el);
+               }
+            });
+            //console.log(this.arrayListIngredientsUstensilsAppliances);
+            //maintenant je sépare les ustensils de mes ingredients et appareils, puis je les metes dans un tableau independent
+            this.arrayListUsetensilsInArray = [] 
+            this.arrayUstensilsTags.map(el => {
+              if (el !== undefined) {
+                this.arrayListIngredientsUstensilsAppliances.map(elt => {
+                  if (elt.indexOf(el) !== -1) {
+                    this.arrayListUsetensilsInArray.push(el)
+                  }
+                }) 
+              }
+            })
+            //maintenant je supprime les ustensils de mon 'arrayListIngredientsUstensilsAppliances'
+            this.arrayListUsetensilsInArray.map(elt => {
+              this.arrayListIngredientsUstensilsAppliances.filter(el => {
+                if (el.indexOf(elt) !== -1 ) {
+                    for(var i = el.length-1 ; i >=0 ; i--){
+                        if (el[i] === elt) {
+                            el.splice(i,1);
+                        }
+                    }
+                }
+            })
+            })
+            /*donc en fin de fonction, j'ai un tableau avec en index 1 les appareils, puis les autres index c'est des ingredients, et en dernier 
+            index un tableau avec le name de la recette.
+            Puis un deuxieme tableau où je melange les ustensils avec les appareils et ingredients*/
     }
   
   //JE FAIS UNE METHODE AVEC UNE CONDITION POUR TRIER MA SECTION DE RECETTES SI J'AI UN SEARCHINGCRITERIA ACTIVE, C'EST A DIRE SI J'AI CHOISI UN TAG
     getSortSectionRecipes(arrayTags2Ingredients, arrayaTgs2Appliances, arrayaTgs2Ustensils, mapIngredients, mapAppareils, mapUstensils ) {
       if (this.searchingCriteria !== null) {
         //je lance ma fonction pour creer et trier le tableau qui contient mes tags en cours
-        this.getSortArrayTags(this.searchingCriteria);
+        this.getSortArrayTags(); 
         /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient, appliances ou ustensils selectionné,
         bien sur à chaque tag choisi le tableau doit etre reinitialisé (a savoir que dans le dernier index de arrayListIngredientsUstensilsAppliances
         j'ai stocké le title de chaque recette)*/
