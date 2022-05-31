@@ -161,7 +161,8 @@ class Algorithme {
         .querySelector(`.input-${tag}`)
         .addEventListener("input", function () {
           checkInput = this.value;
-          map.innerHTML = "";
+          console.log(checkInput);
+          mapelement.innerHTML = "";
           arrayTags2.filter((el) => {
             if (el.textContent.toLowerCase().indexOf(checkInput) !== -1) {
               mapelement.appendChild(el);
