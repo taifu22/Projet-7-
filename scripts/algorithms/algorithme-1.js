@@ -129,7 +129,7 @@ class Algorithme {
       false, selon si la modale est ouverte ou fermé)*/
         arrayTags.map((el) => {
         pIngredient = document.createElement("li");
-        pIngredient.setAttribute("class","li-ingredient-ustensils-appliances list-group")
+        pIngredient.setAttribute("class","li-ingredient-ustensils-appliances dropdown-item")
         pIngredient.setAttribute("id", tag);
         pIngredient.innerHTML = el.toLowerCase();
         arrayTags2.push(pIngredient);
@@ -311,7 +311,6 @@ class Algorithme {
 
   //METHODE POUR REMPLIR MON TABLEAUX QUI M'AFFICHERA ENSUITE LES RECETTES DONT J'AI LES TAGS EN COURS
     getSortArrayTags() {
-      //console.log(this.searchingCriterias);
       /*je stocke les appareils/ingredients et le name(dans un array) de chaque recette dans notre 'arrayListIngredientsUstensilsAppliances'
         mais avant je pense bien à reinitialiser ce tableau car sinon à chaque fois, mon tableau ajoute des doublons
         Ce tableau du coup contient les recettes dont on a choisi un ingredients ustensils ou appareil*/
@@ -349,9 +348,7 @@ class Algorithme {
             ingredient.push(description)
             ingredient.push(name);
             this.arraySearchTagsWithUstensils.push(ingredient)
-          }) 
-          //console.log(this.arraySearchTags);
-          //console.log(this.arraySearchTagsWithUstensils);
+          });
           /*je crée une fonction pour pouvoir verifier si les elements de SearchingCriterias (les tags en cours), sont bien presents, dans un index
             des recettes en cours d'affichage (arraySearchTags)*/
             function isSubsetOf(set, subset) {
@@ -401,7 +398,6 @@ class Algorithme {
                 }
             })
             })
-            //console.log(this.arrayListIngredientsUstensilsAppliances);
             /*donc en fin de fonction, j'ai un tableau avec en index 1 les appareils, puis les autres index c'est des ingredients, et en dernier 
             index un tableau avec le name de la recette.
             Puis un deuxieme tableau où je melange les ustensils avec les appareils et ingredients*/
@@ -416,7 +412,6 @@ class Algorithme {
         bien sur à chaque tag choisi le tableau doit etre reinitialisé (a savoir que dans le dernier index de arrayListIngredientsUstensilsAppliances
         j'ai stocké le title de chaque recette)*/
         this.arrayListAllTitles = [];
-        //console.log(this.arrayListIngredientsUstensilsAppliances);
         this.arrayListIngredientsUstensilsAppliances.map((el) => {
           this.arrayListAllTitles.push(el[el.length - 1]);
         });

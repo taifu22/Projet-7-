@@ -1568,7 +1568,7 @@ const recipes = [
   },
   {
     id: 45,
-    name: "Crème patissière",
+    name: "ère",
     servings: 8,
     ingredients: [
       {

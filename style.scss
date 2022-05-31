@@ -17,16 +17,18 @@
 }
 
 %map {
-    height: 500px;
+    //height: 500px;
+    height: auto;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    //display: flex;
+    //flex-direction: column;
+    //justify-content: space-between;
+    //flex-wrap: wrap;
     color: black;
     position: absolute; 
     li{
         cursor: pointer;
+        color: white;
         &:hover{
             color: black;
             background-color: white;
@@ -70,7 +72,7 @@
                 justify-content: space-between;
                 .element{
                     height: 50px;
-        width: 1300px;
+                    width: 300px;
                     color: white;
                     padding-left: 10px;
                     border-radius: 5px 5px 5px 5px;

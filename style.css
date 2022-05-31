@@ -17,17 +17,14 @@ main form .container-elements2-ustensils div .chevron-ustensils, main form .cont
 }
 
 main form .container-elements2-ustensils .map-ustensils, main form .container-elements2-appareils .map-ustensils, main form .container-elements2-ingredient .map-ustensils, main form .container-elements2-ustensils .map-appareils, main form .container-elements2-appareils .map-appareils, main form .container-elements2-ingredient .map-appareils, main form .container-elements2-ustensils .map-ingredients, main form .container-elements2-appareils .map-ingredients, main form .container-elements2-ingredient .map-ingredients {
-  height: 500px;
+  height: auto;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex-wrap: wrap;
   color: black;
   position: absolute;
 }
 main form .container-elements2-ustensils .map-ustensils li, main form .container-elements2-appareils .map-ustensils li, main form .container-elements2-ingredient .map-ustensils li, main form .container-elements2-ustensils .map-appareils li, main form .container-elements2-appareils .map-appareils li, main form .container-elements2-ingredient .map-appareils li, main form .container-elements2-ustensils .map-ingredients li, main form .container-elements2-appareils .map-ingredients li, main form .container-elements2-ingredient .map-ingredients li {
   cursor: pointer;
+  color: white;
 }
 main form .container-elements2-ustensils .map-ustensils li:hover, main form .container-elements2-appareils .map-ustensils li:hover, main form .container-elements2-ingredient .map-ustensils li:hover, main form .container-elements2-ustensils .map-appareils li:hover, main form .container-elements2-appareils .map-appareils li:hover, main form .container-elements2-ingredient .map-appareils li:hover, main form .container-elements2-ustensils .map-ingredients li:hover, main form .container-elements2-appareils .map-ingredients li:hover, main form .container-elements2-ingredient .map-ingredients li:hover {
   color: black;
@@ -63,7 +60,7 @@ main form .container-elements2-ustensils div, main form .container-elements2-app
 }
 main form .container-elements2-ustensils div .element, main form .container-elements2-appareils div .element, main form .container-elements2-ingredient div .element {
   height: 50px;
-  width: 1300px;
+  width: 300px;
   color: white;
   padding-left: 10px;
   border-radius: 5px 5px 5px 5px;
