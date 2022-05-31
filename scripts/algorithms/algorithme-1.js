@@ -3,8 +3,6 @@ class Algorithme {
         this.recipesSection = recipesSection
         //variables pour stocker les tableaux qu'on utilisera pour stocker les ingredinets, ustensiles et appareils
         this.arrayRecipes = arrayRecipes;
-        //variable pour stocker tous les utensils dans un tableau
-        this.arrayUstensilsTags = arrayUstensilsTags;
         //variables pour stocker les tags en cours
         this.searchingCriterias = [];
         this.searchingCriteria = null;
@@ -35,13 +33,13 @@ class Algorithme {
    //METHODE POUR TRIER MES 3 MENU ELEMENTS, INGREDIENTS APPLIANCES ET USTENSILS, PAR RAPPORT A LA VALUE DE L'INPUT
    //cette function on l'utilisera dans celle juste en bas
    getSortElementsInput(ingredients, appliances, ustensils, names){
-      let name = [names];
+      let name = [names.toLowerCase()];
       let ingredient = ingredients.map((el2) => {
-        return el2.ingredient;
+        return el2.ingredient.toLowerCase();
       });
-      let appliance = appliances;
+      let appliance = appliances.toLowerCase();
       let ustensil = ustensils.map((el) => {
-        return el
+        return el.toLowerCase()
       });
       ingredient.unshift(ustensil);
       ingredient.unshift(appliance);
@@ -49,7 +47,7 @@ class Algorithme {
       this.arraySearchTags.push(ingredient);
       //je créé un autre tableau où cette fois je melange les ustensils avec les ingredients et appareils
         let ustensil2 = ustensils.map((el) => {
-          return el;
+          return el.toLowerCase();
         });
         ustensil2.map(el => {
           return this.arrayListUsetensilsInArray.push(el)
@@ -82,13 +80,12 @@ class Algorithme {
                 this.cardsRecipes.map(elt => {
                   elt.ingredients.map(elt1 => { 
                     //dans el.id j'ai le name, donc ca c'est la condition pour afficher mes recettes selon le name
-                  if (el.id.indexOf(check1) !== -1 && el.id === elt.name) {
+                  if (el.id.toLowerCase().indexOf(check1) !== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
                     this.recipesSection.appendChild(el);
                     this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
                   } 
                   //ici je fais la condition pour l'ffichage des recettes selon la description
-                  else if(elt.description.indexOf(check1)!== -1 && el.id === elt.name) {
-                    console.log('description');
+                  else if(elt.description.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
                     this.recipesSection.appendChild(el);
                     this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
                   }
@@ -99,8 +96,7 @@ class Algorithme {
                     this.searchingCriterias = [];
                   }
                   //enfin ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
-                  else if (elt1.ingredient.indexOf(check1)!== -1 && el.id === elt.name) {
-                    console.log('ingredients');
+                  else if (elt1.ingredient.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
                       this.recipesSection.appendChild(el);  
                       this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);              
                   }
@@ -128,7 +124,7 @@ class Algorithme {
         pIngredient = document.createElement("li");
         pIngredient.setAttribute("class","li-ingredient-ustensils-appliances list-group")
         pIngredient.setAttribute("id", tag);
-        pIngredient.innerHTML = el;
+        pIngredient.innerHTML = el.toLowerCase();
         arrayTags2.push(pIngredient);
         mapelement.appendChild(pIngredient);
       });
@@ -144,7 +140,6 @@ class Algorithme {
             containerElements2.style.display = "none";
             chevronClick = true;
           }
-          e.stopPropagation()
           //je lance la fonction pour filtrer nos 3 menus selon la value de l'input
           this.getFilterInput(checkInput, mapelement, arrayTags2, tag)
         })
@@ -259,7 +254,7 @@ class Algorithme {
       mapelement.innerHTML = "";
       listTagssWithTag.map((el) => {
         arrayTags2.map((elt) => {
-          if (elt.textContent === el) {
+          if (elt.textContent.toLowerCase() === el) {
             mapelement.appendChild(elt);
           }
         });
@@ -272,7 +267,7 @@ class Algorithme {
       this.arrayRecipes.map((el) => {
         this.arrayListAllTitles.map((elt) => {
           if (elt !== undefined) {
-            if (elt.indexOf(el.id) !== -1) {
+            if (elt.indexOf(el.id.toLowerCase()) !== -1) {
               this.recipesSection.appendChild(el);
             }
           }
@@ -309,17 +304,17 @@ class Algorithme {
 
   //METHODE POUR REMPLIR MON TABLEAUX QUI M'AFFICHERA ENSUITE LES RECETTES DONT J'AI LES TAGS EN COURS
     getSortArrayTags() {
-      console.log(this.searchingCriterias);
+      //console.log(this.searchingCriterias);
       /*je stocke les appareils/ingredients et le name(dans un array) de chaque recette dans notre 'arrayListIngredientsUstensilsAppliances'
         mais avant je pense bien à reinitialiser ce tableau car sinon à chaque fois, mon tableau ajoute des doublons
         Ce tableau du coup contient les recettes dont on a choisi un ingredients ustensils ou appareil*/
           this.arraySearchTags = [];
           this.cardsRecipes.map((el) => {
-            let name = [el.name];
+            let name = [el.name.toLowerCase()];
             let ingredient = el.ingredients.map((el) => {
-              return el.ingredient;
+              return el.ingredient.toLowerCase();
             });
-            let appliance = el.appliance;
+            let appliance = el.appliance.toLowerCase();
             let ustensils = el.ustensils.map((el) => {
               return el.toLowerCase();
             });
@@ -331,14 +326,14 @@ class Algorithme {
           //je créé un autre tableau où cette fois je melange les ustensils avec les ingredients et appareils
           this.arraySearchTagsWithUstensils = [];
           this.cardsRecipes.map(el => {
-            let name = [el.name];
-            let description = el.description;
+            let name = [el.name.toLowerCase()];
+            let description = el.description.toLowerCase();
             let ingredient = el.ingredients.map((el) => {
-              return el.ingredient;
+              return el.ingredient.toLowerCase();
             });
-            let appliance = el.appliance;
+            let appliance = el.appliance.toLowerCase();
             let ustensils = el.ustensils.map((el) => {
-              return el;
+              return el.toLowerCase();
             });
             ingredient.unshift(appliance)
             ustensils.map(el => {
@@ -348,6 +343,8 @@ class Algorithme {
             ingredient.push(name);
             this.arraySearchTagsWithUstensils.push(ingredient)
           }) 
+          //console.log(this.arraySearchTags);
+          //console.log(this.arraySearchTagsWithUstensils);
           /*je crée une fonction pour pouvoir verifier si les elements de SearchingCriterias (les tags en cours), sont bien presents, dans un index
             des recettes en cours d'affichage (arraySearchTags)*/
             function isSubsetOf(set, subset) {
@@ -368,9 +365,14 @@ class Algorithme {
                }
             });
             //console.log(this.arrayListIngredientsUstensilsAppliances);
-            //maintenant je sépare les ustensils de mes ingredients et appareils, puis je les metes dans un tableau independent
-            this.arrayListUsetensilsInArray = [] 
+            /*maintenant je sépare les ustensils de mes ingredients et appareils, puis je les metes dans un tableau independent, je fait attention
+            car le arrayUstensilstags, je le récupere de la classe CardRecipes, donc les elements je doit les toLowerCase*/
+            let newArrayUstensilsTags = []
             this.arrayUstensilsTags.map(el => {
+              return newArrayUstensilsTags.push(el.toLowerCase())
+            })
+            this.arrayListUsetensilsInArray = [] 
+            newArrayUstensilsTags.map(el => {
               if (el !== undefined) {
                 this.arrayListIngredientsUstensilsAppliances.map(elt => {
                   if (elt.indexOf(el) !== -1) {
@@ -379,6 +381,7 @@ class Algorithme {
                 }) 
               }
             })
+            //console.log(this.arrayListUsetensilsInArray);
             //maintenant je supprime les ustensils de mon 'arrayListIngredientsUstensilsAppliances'
             this.arrayListUsetensilsInArray.map(elt => {
               this.arrayListIngredientsUstensilsAppliances.filter(el => {
@@ -391,6 +394,7 @@ class Algorithme {
                 }
             })
             })
+            //console.log(this.arrayListIngredientsUstensilsAppliances);
             /*donc en fin de fonction, j'ai un tableau avec en index 1 les appareils, puis les autres index c'est des ingredients, et en dernier 
             index un tableau avec le name de la recette.
             Puis un deuxieme tableau où je melange les ustensils avec les appareils et ingredients*/
@@ -405,6 +409,7 @@ class Algorithme {
         bien sur à chaque tag choisi le tableau doit etre reinitialisé (a savoir que dans le dernier index de arrayListIngredientsUstensilsAppliances
         j'ai stocké le title de chaque recette)*/
         this.arrayListAllTitles = [];
+        //console.log(this.arrayListIngredientsUstensilsAppliances);
         this.arrayListIngredientsUstensilsAppliances.map((el) => {
           this.arrayListAllTitles.push(el[el.length - 1]);
         });
