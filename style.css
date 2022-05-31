@@ -98,6 +98,12 @@ main form .container-search img {
   top: 15px;
   height: 25px;
 }
+main .error-recipes {
+  display: none;
+  font-weight: bold;
+  margin-top: 20px;
+  color: red;
+}
 main section {
   margin-top: 20px;
 }

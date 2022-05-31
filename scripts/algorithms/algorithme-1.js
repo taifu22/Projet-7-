@@ -28,6 +28,8 @@ class Algorithme {
         this.activeResearchBar = false;
         //variable pour stocker l'input de ma research-bar
         this.check = null;
+        //variable qui me stocke l'erreur si on a pas de recettes a afficher
+        this.errorRecipes = document.querySelector('.error-recipes');
     }
 
    //METHODE POUR TRIER MES 3 MENU ELEMENTS, INGREDIENTS APPLIANCES ET USTENSILS, PAR RAPPORT A LA VALUE DE L'INPUT DE MA RESEARCH-BAR
@@ -66,7 +68,7 @@ class Algorithme {
         const formulaire = document.querySelector(".formulaire");
         formulaire.addEventListener("submit", (e) => {
             e.preventDefault();
-            this.check = check1
+            this.errorRecipes.style.display = 'none';
             this.recipesSection.innerHTML = "";
             this.arraySearchTags = [];
             this.arraySearchTagsWithUstensils = [];
@@ -81,30 +83,30 @@ class Algorithme {
                 this.cardsRecipes.map(elt => {
                   //je filtre mes ingredients de chaque recette, pour en avoir un par un (car ils sont dans ingredients, sous l'objet ingredient)
                   elt.ingredients.map(elt1 => { 
-                  //je fais la condition pour afficher les recettes selon un mot dans le titre
-                  //dans el.id j'ai le name, donc ca c'est la condition pour afficher mes recettes selon le name
-                  if (el.id.toLowerCase().indexOf(check1) !== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
-                    this.recipesSection.appendChild(el);
-                    //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va afficher
-                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
-                  } 
-                  //ici je fais la condition pour l'ffichage des recettes selon la description
-                  else if(elt.description.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
-                    this.recipesSection.appendChild(el);
-                    //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va afficher
-                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
-                  }
-                  //ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
-                  else if (elt1.ingredient.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
-                    this.recipesSection.appendChild(el);  
-                    //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va affiche
-                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);              
-                  }
-                  //enfin si ma barre de recherche est vide, donc input vide, je charcge tout mon contenu des 3 menus
-                  else if (this.check === "") {
-                    this.recipesSection.appendChild(el);
-                    this.searchingCriterias = [];
-                  }
+                    //je fais la condition pour afficher les recettes selon un mot dans le titre
+                    //dans el.id j'ai le name, donc ca c'est la condition pour afficher mes recettes selon le name
+                    if (el.id.toLowerCase().indexOf(check1) !== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
+                      this.recipesSection.appendChild(el);
+                      //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va afficher
+                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
+                    } 
+                    //ici je fais la condition pour l'ffichage des recettes selon la description
+                    else if(elt.description.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
+                      this.recipesSection.appendChild(el);
+                      //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va afficher
+                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
+                    }
+                    //ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
+                    else if (elt1.ingredient.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
+                      this.recipesSection.appendChild(el);  
+                      //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va affiche
+                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);              
+                    }
+                    //enfin si ma barre de recherche est vide, donc input vide, je charcge tout mon contenu des 3 menus
+                    else if (this.check === "") {
+                      this.recipesSection.appendChild(el);
+                      this.searchingCriterias = [];
+                    }                   
                   })
                 }) 
             })
@@ -116,6 +118,10 @@ class Algorithme {
             this.getNewShowListTags(mapIngredients, arrayTags2Ingredients, this.listIngredientsWithTag)
             this.getNewShowListTags(mapAppareils, arrayTags2Appliances, this.listappliancesWithTag)
             this.getNewShowListTags(mapUstensils, arrayTags2Ustensils, this.listustensilsWithTag)
+            console.log(this.recipesSection.firstElementChild);
+            if (this.recipesSection.firstElementChild === null) {
+              this.errorRecipes.style.display = 'block';
+            }
         })
     }
 
@@ -311,7 +317,7 @@ class Algorithme {
     }
 
   //METHODE POUR REMPLIR MON TABLEAUX QUI M'AFFICHERA ENSUITE LES RECETTES DONT J'AI LES TAGS EN COURS
-    getSortArrayTags() {
+  getSortArrayTags() {
       /*je stocke les appareils/ingredients et le name(dans un array) de chaque recette dans notre 'arrayListIngredientsUstensilsAppliances'
         mais avant je pense bien à reinitialiser ce tableau car sinon à chaque fois, mon tableau ajoute des doublons
         Ce tableau du coup contient les recettes dont on a choisi un ingredients ustensils ou appareil*/
@@ -402,21 +408,26 @@ class Algorithme {
             /*donc en fin de fonction, j'ai un tableau avec en index 1 les appareils, puis les autres index c'est des ingredients, et en dernier 
             index un tableau avec le name de la recette.
             Puis un deuxieme tableau où je melange les ustensils avec les appareils et ingredients*/
-    }
+  }
+
+  //JE FAIT UNE METHODE QUI ME STOCKERA JUSTE LES TITRES DES RECETTES TRIEES
+  getSortiRecipesWithTitle(){
+    /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient, appliances ou ustensils selectionné,
+        bien sur à chaque tag choisi le tableau doit etre reinitialisé (a savoir que dans le dernier index de arrayListIngredientsUstensilsAppliances
+        j'ai stocké le title de chaque recette)*/
+    this.arrayListAllTitles = [];
+    this.arrayListIngredientsUstensilsAppliances.map((el) => {
+      this.arrayListAllTitles.push(el[el.length - 1]);
+    });
+  }
   
   //JE FAIS UNE METHODE AVEC UNE CONDITION POUR TRIER MA SECTION DE RECETTES SI J'AI UN SEARCHINGCRITERIA ACTIVE, C'EST A DIRE SI J'AI CHOISI UN TAG
     getSortSectionRecipes(arrayTags2Ingredients, arrayaTgs2Appliances, arrayaTgs2Ustensils, mapIngredients, mapAppareils, mapUstensils ) {
       if (this.searchingCriteria !== null) {
         //je lance ma fonction pour creer et trier le tableau qui contient mes tags en cours
         this.getSortArrayTags(); 
-        /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient, appliances ou ustensils selectionné,
-        bien sur à chaque tag choisi le tableau doit etre reinitialisé (a savoir que dans le dernier index de arrayListIngredientsUstensilsAppliances
-        j'ai stocké le title de chaque recette)*/
-        this.arrayListAllTitles = [];
-        this.arrayListIngredientsUstensilsAppliances.map((el) => {
-          this.arrayListAllTitles.push(el[el.length - 1]);
-        });
-    
+        /*je lance la fonction pour stocker juste les titres des recettes triees*/
+        this.getSortiRecipesWithTitle();
         /*je lance les 3 fonction pour stocker dans 3 tableau chacun juste les ingredients, appareils, ustensils de toutes les recettes dont j'ai 
         choisi un ingredient, apareil, ou utensile*/
         this.getSortListTagsINgredients(this.arrayListIngredientsUstensilsAppliances);
@@ -451,13 +462,9 @@ class Algorithme {
                 this.searchingCriterias.splice(index, 1);
               }
               //je lance ma fonction pour creer et trier le tableau qui contient mes tags en cours
-              this.getSortArrayTags(this.searchingCriteria);
-              /*je stocke dans un tableau juste les titres des recettes avec l'ingrédient selectionné,
-                            bien sur à chaque tag choisi le tableau doit etre reinitialisé*/
-              this.arrayListAllTitles = [];
-              this.arrayListIngredientsUstensilsAppliances.map((el) => {
-                this.arrayListAllTitles.push(el[el.length - 1]);
-              });
+              this.getSortArrayTags();
+              /*je lance la fonction pour stocker juste les titres des recettes triees*/
+              this.getSortiRecipesWithTitle();
               /*je lance les 3 fonction pour stocker dans 3 tableau chacun juste les ingredients, appareils, ustensils de toutes les recettes dont j'ai 
               choisi un ingredient, apareil, ou utensile*/
               this.getSortListTagsINgredients(this.arrayListIngredientsUstensilsAppliances);
