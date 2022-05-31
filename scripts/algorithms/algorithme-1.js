@@ -30,7 +30,7 @@ class Algorithme {
         this.check = null;
     }
 
-   //METHODE POUR TRIER MES 3 MENU ELEMENTS, INGREDIENTS APPLIANCES ET USTENSILS, PAR RAPPORT A LA VALUE DE L'INPUT
+   //METHODE POUR TRIER MES 3 MENU ELEMENTS, INGREDIENTS APPLIANCES ET USTENSILS, PAR RAPPORT A LA VALUE DE L'INPUT DE MA RESEARCH-BAR
    //cette function on l'utilisera dans celle juste en bas
    getSortElementsInput(ingredients, appliances, ustensils, names){
       let name = [names.toLowerCase()];
@@ -50,7 +50,7 @@ class Algorithme {
           return el.toLowerCase();
         });
         ustensil2.map(el => {
-          return this.arrayListUsetensilsInArray.push(el)
+          return this.arrayListUsetensilsInArray.push(el);
         })
    }
 
@@ -70,35 +70,40 @@ class Algorithme {
             this.recipesSection.innerHTML = "";
             this.arraySearchTags = [];
             this.arraySearchTagsWithUstensils = [];
-            this.arrayListUsetensilsInArra = [];
+            this.arrayListUsetensilsInArray = [];
             this.activeResearchBar = true
             this.searchingCriterias.push(check1);
-            //on filtre notre tableau pour afficher juste les cards qui nous interessent
+            /*on filtre notre tableau pour afficher juste les cards qui nous interessent (arrayRecipes contients nos cards 
+            sous forme de balises article)*/
             this.arrayRecipes.filter((el) => {
-                //je fais une condition pour trouver mes cards par rapport à une lettre ou une chaine de caracthere présente dans le nom de la recette
-                //(que j'ai mis tout à l'heure dans le id de chaque recette), ou selon la description ou un ingredient 
+                /*je filtre le fetch du fichier json, pour faire aprés des coditions, et afficher les bonnes cards, selon le titre,
+                la desription ou un ingredient*/
                 this.cardsRecipes.map(elt => {
+                  //je filtre mes ingredients de chaque recette, pour en avoir un par un (car ils sont dans ingredients, sous l'objet ingredient)
                   elt.ingredients.map(elt1 => { 
-                    //dans el.id j'ai le name, donc ca c'est la condition pour afficher mes recettes selon le name
+                  //je fais la condition pour afficher les recettes selon un mot dans le titre
+                  //dans el.id j'ai le name, donc ca c'est la condition pour afficher mes recettes selon le name
                   if (el.id.toLowerCase().indexOf(check1) !== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
                     this.recipesSection.appendChild(el);
+                    //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va afficher
                     this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
                   } 
                   //ici je fais la condition pour l'ffichage des recettes selon la description
                   else if(elt.description.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
                     this.recipesSection.appendChild(el);
+                    //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va afficher
                     this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
+                  }
+                  //ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
+                  else if (elt1.ingredient.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
+                    this.recipesSection.appendChild(el);  
+                    //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va affiche
+                    this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);              
                   }
                   //enfin si ma barre de recherche est vide, donc input vide, je charcge tout mon contenu des 3 menus
                   else if (this.check === "") {
                     this.recipesSection.appendChild(el);
-                    //this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);
                     this.searchingCriterias = [];
-                  }
-                  //enfin ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
-                  else if (elt1.ingredient.toLowerCase().indexOf(check1)!== -1 && el.id.toLowerCase() === elt.name.toLowerCase()) {
-                      this.recipesSection.appendChild(el);  
-                      this.getSortElementsInput(elt.ingredients, elt.appliance, elt.ustensils, elt.name);              
                   }
                   })
                 }) 
@@ -118,8 +123,10 @@ class Algorithme {
     getListTags( arrayTags, arrayTags2, containerElements, containerElements2, chevron, chevronClick, mapelement, tag, checkInput) {
       let pIngredient = null;
       /*on map notre array avec la liste de tous les ingredients, et on l'affiche dans la liste des ingredients,ustensils, appliances
-      a savoir que c'est une fonction qu'on utilisera 3 fois, une pour les ingredinets, une pour les ustensils, et une pour les appliances
-      ces 3 fonctions sont appelé dans la class CardRecipes, et en argument on mettra les bonnes info pour ingredients, ustensils et appliance */
+      a savoir que c'est une fonction qu'on utilisera 3 fois, une pour les ingredients, une pour les ustensils, et une pour les appliances.
+      Ces 3 fonctions sont appelé dans la class CardRecipes, et en argument on mettra les bonnes info pour ingredients, ustensils et appliance 
+      (a savoir le container, pour l'affichage, le chevron pour la fermeture et ouverture, et le chevronClick, qui me permet de donner un etat true 
+      false, selon si la modale est ouverte ou fermé)*/
         arrayTags.map((el) => {
         pIngredient = document.createElement("li");
         pIngredient.setAttribute("class","li-ingredient-ustensils-appliances list-group")
@@ -128,7 +135,7 @@ class Algorithme {
         arrayTags2.push(pIngredient);
         mapelement.appendChild(pIngredient);
       });
-      //j'affiche la modale dans l'input du choix pour la recherche selon l'element 
+      //j'affiche et je ferme la modale dans l'input du choix pour la recherche selon l'element voulu
       chevron.forEach((btn) =>
         btn.addEventListener("click", (e) => {
           if (chevronClick) {
@@ -146,7 +153,7 @@ class Algorithme {
       );
     }
 
-    //METHODE POUR FILTRER NOTRE MENU INGREDIENT, OU USTENSIL, OU APPAREIL SELON LA VALUE DE L'INPUT
+    //METHODE POUR FILTRER NOTRE MENU INGREDIENT, USTENSIL, OU APPAREIL SELON LA VALUE QU'ON RENTRE DANS L'INPUT
     getFilterInput(checkInput, mapelement, arrayTags2, tag){
       /*je recupere l'element input correspondant a mon tag (ingredient, ustensils ou appareil) et j'affiche mes tags selon l'input  
       Cette fonction aussi est utilisé 3 fois pour chaque menu (ingredient, ustensils ou appareils)*/
