@@ -1,4 +1,4 @@
-main form .container-elements-ingredient .element .chevron-ingredients, main form .container-elements-appareils .element .chevron-ingredients, main form .container-elements-ustensils .element .chevron-ingredients, main form .container-elements-ingredient .element .chevron-appareils, main form .container-elements-appareils .element .chevron-appareils, main form .container-elements-ustensils .element .chevron-appareils, main form .container-elements-ingredient .element .chevron-ustensils, main form .container-elements-appareils .element .chevron-ustensils, main form .container-elements-ustensils .element .chevron-ustensils {
+main form .container-elements-ustensils .element .chevron-ustensils, main form .container-elements-appareils .element .chevron-ustensils, main form .container-elements-ingredient .element .chevron-ustensils, main form .container-elements-ustensils .element .chevron-appareils, main form .container-elements-appareils .element .chevron-appareils, main form .container-elements-ingredient .element .chevron-appareils, main form .container-elements-ustensils .element .chevron-ingredients, main form .container-elements-appareils .element .chevron-ingredients, main form .container-elements-ingredient .element .chevron-ingredients {
   position: absolute;
   cursor: pointer;
   bottom: 10px;
@@ -6,7 +6,7 @@ main form .container-elements-ingredient .element .chevron-ingredients, main for
   left: 120px;
 }
 
-main form .container-elements2-ingredient div .chevron-ingredients, main form .container-elements2-appareils div .chevron-ingredients, main form .container-elements2-ustensils div .chevron-ingredients, main form .container-elements2-ingredient div .chevron-appareils, main form .container-elements2-appareils div .chevron-appareils, main form .container-elements2-ustensils div .chevron-appareils, main form .container-elements2-ingredient div .chevron-ustensils, main form .container-elements2-appareils div .chevron-ustensils, main form .container-elements2-ustensils div .chevron-ustensils {
+main form .container-elements2-ustensils div .chevron-ustensils, main form .container-elements2-appareils div .chevron-ustensils, main form .container-elements2-ingredient div .chevron-ustensils, main form .container-elements2-ustensils div .chevron-appareils, main form .container-elements2-appareils div .chevron-appareils, main form .container-elements2-ingredient div .chevron-appareils, main form .container-elements2-ustensils div .chevron-ingredients, main form .container-elements2-appareils div .chevron-ingredients, main form .container-elements2-ingredient div .chevron-ingredients {
   cursor: pointer;
   position: absolute;
   width: 50px;
@@ -16,95 +16,69 @@ main form .container-elements2-ingredient div .chevron-ingredients, main form .c
   color: white;
 }
 
-main form .container-elements2-ingredient .map-ingredients, main form .container-elements2-appareils .map-ingredients, main form .container-elements2-ustensils .map-ingredients, main form .container-elements2-ingredient .map-appareils, main form .container-elements2-appareils .map-appareils, main form .container-elements2-ustensils .map-appareils, main form .container-elements2-ingredient .map-ustensils, main form .container-elements2-appareils .map-ustensils, main form .container-elements2-ustensils .map-ustensils {
+main form .container-elements2-ustensils .map-ustensils, main form .container-elements2-appareils .map-ustensils, main form .container-elements2-ingredient .map-ustensils, main form .container-elements2-ustensils .map-appareils, main form .container-elements2-appareils .map-appareils, main form .container-elements2-ingredient .map-appareils, main form .container-elements2-ustensils .map-ingredients, main form .container-elements2-appareils .map-ingredients, main form .container-elements2-ingredient .map-ingredients {
   height: auto;
   padding: 20px;
   color: black;
   position: absolute;
 }
-
-main form .container-elements2-ingredient .map-ingredients li, main form .container-elements2-appareils .map-ingredients li, main form .container-elements2-ustensils .map-ingredients li, main form .container-elements2-ingredient .map-appareils li, main form .container-elements2-appareils .map-appareils li, main form .container-elements2-ustensils .map-appareils li, main form .container-elements2-ingredient .map-ustensils li, main form .container-elements2-appareils .map-ustensils li, main form .container-elements2-ustensils .map-ustensils li {
+main form .container-elements2-ustensils .map-ustensils li, main form .container-elements2-appareils .map-ustensils li, main form .container-elements2-ingredient .map-ustensils li, main form .container-elements2-ustensils .map-appareils li, main form .container-elements2-appareils .map-appareils li, main form .container-elements2-ingredient .map-appareils li, main form .container-elements2-ustensils .map-ingredients li, main form .container-elements2-appareils .map-ingredients li, main form .container-elements2-ingredient .map-ingredients li {
   cursor: pointer;
   color: white;
 }
-
-main form .container-elements2-ingredient .map-ingredients li:hover, main form .container-elements2-appareils .map-ingredients li:hover, main form .container-elements2-ustensils .map-ingredients li:hover, main form .container-elements2-ingredient .map-appareils li:hover, main form .container-elements2-appareils .map-appareils li:hover, main form .container-elements2-ustensils .map-appareils li:hover, main form .container-elements2-ingredient .map-ustensils li:hover, main form .container-elements2-appareils .map-ustensils li:hover, main form .container-elements2-ustensils .map-ustensils li:hover {
+main form .container-elements2-ustensils .map-ustensils li:hover, main form .container-elements2-appareils .map-ustensils li:hover, main form .container-elements2-ingredient .map-ustensils li:hover, main form .container-elements2-ustensils .map-appareils li:hover, main form .container-elements2-appareils .map-appareils li:hover, main form .container-elements2-ingredient .map-appareils li:hover, main form .container-elements2-ustensils .map-ingredients li:hover, main form .container-elements2-appareils .map-ingredients li:hover, main form .container-elements2-ingredient .map-ingredients li:hover {
   color: black;
   background-color: white;
 }
 
-main form .container-elements-ingredient, main form .container-elements-appareils, main form .container-elements-ustensils {
+main form .container-elements-ustensils, main form .container-elements-appareils, main form .container-elements-ingredient {
   position: relative;
   margin-right: 20px;
 }
-
-main form .container-elements-ingredient .element, main form .container-elements-appareils .element, main form .container-elements-ustensils .element {
-  display: -webkit-box;
-  display: -ms-flexbox;
+main form .container-elements-ustensils .element, main form .container-elements-appareils .element, main form .container-elements-ingredient .element {
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: space-between;
+  align-items: center;
   height: 50px;
   width: 150px;
   color: white;
   padding-left: 10px;
   border-radius: 5px 5px 5px 5px;
 }
-
-main form .container-elements-ingredient .element p, main form .container-elements-appareils .element p, main form .container-elements-ustensils .element p {
+main form .container-elements-ustensils .element p, main form .container-elements-appareils .element p, main form .container-elements-ingredient .element p {
   margin-top: 15px;
 }
 
-main form .container-elements2-ingredient, main form .container-elements2-appareils, main form .container-elements2-ustensils {
+main form .container-elements2-ustensils, main form .container-elements2-appareils, main form .container-elements2-ingredient {
   position: relative;
   margin-right: 20px;
   display: none;
 }
-
-main form .container-elements2-ingredient div, main form .container-elements2-appareils div, main form .container-elements2-ustensils div {
-  display: -webkit-box;
-  display: -ms-flexbox;
+main form .container-elements2-ustensils div, main form .container-elements2-appareils div, main form .container-elements2-ingredient div {
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
-
-main form .container-elements2-ingredient div .element, main form .container-elements2-appareils div .element, main form .container-elements2-ustensils div .element {
+main form .container-elements2-ustensils div .element, main form .container-elements2-appareils div .element, main form .container-elements2-ingredient div .element {
   height: 50px;
   width: 300px;
   color: white;
   padding-left: 10px;
   border-radius: 5px 5px 5px 5px;
 }
-
-main form .container-elements2-ingredient div .element::-webkit-input-placeholder, main form .container-elements2-appareils div .element::-webkit-input-placeholder, main form .container-elements2-ustensils div .element::-webkit-input-placeholder {
+main form .container-elements2-ustensils div .element::-moz-placeholder, main form .container-elements2-appareils div .element::-moz-placeholder, main form .container-elements2-ingredient div .element::-moz-placeholder {
   color: white;
   padding-left: 10px;
 }
-
-main form .container-elements2-ingredient div .element:-ms-input-placeholder, main form .container-elements2-appareils div .element:-ms-input-placeholder, main form .container-elements2-ustensils div .element:-ms-input-placeholder {
+main form .container-elements2-ustensils div .element:-ms-input-placeholder, main form .container-elements2-appareils div .element:-ms-input-placeholder, main form .container-elements2-ingredient div .element:-ms-input-placeholder {
   color: white;
   padding-left: 10px;
 }
-
-main form .container-elements2-ingredient div .element::-ms-input-placeholder, main form .container-elements2-appareils div .element::-ms-input-placeholder, main form .container-elements2-ustensils div .element::-ms-input-placeholder {
+main form .container-elements2-ustensils div .element::placeholder, main form .container-elements2-appareils div .element::placeholder, main form .container-elements2-ingredient div .element::placeholder {
   color: white;
   padding-left: 10px;
 }
-
-main form .container-elements2-ingredient div .element::placeholder, main form .container-elements2-appareils div .element::placeholder, main form .container-elements2-ustensils div .element::placeholder {
-  color: white;
-  padding-left: 10px;
-}
-
 * {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
@@ -114,86 +88,68 @@ body {
 main form .container-search {
   position: relative;
 }
-
 main form .container-search .form-control {
-  background-color: #f3f0f0;
+  background-color: rgb(243, 240, 240);
   height: 50px;
 }
-
 main form .container-search img {
   position: absolute;
   right: 10px;
   top: 15px;
   height: 25px;
 }
-
 main .error-recipes {
   display: none;
   font-weight: bold;
   margin-top: 20px;
   color: red;
 }
-
+main .error-search-bar {
+  display: none;
+  font-weight: bold;
+  margin-top: 20px;
+  color: red;
+}
 main section {
   margin-top: 20px;
 }
-
 main section article {
   width: 100%;
 }
-
 main section article img {
   width: 100%;
   height: 300px;
   -o-object-fit: cover;
      object-fit: cover;
 }
-
 main section article .text {
-  background-color: #dde9e9;
+  background-color: rgb(221, 233, 233);
   padding: 15px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   width: 100%;
   height: auto;
 }
-
 main section article .text .text-1 {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
-
 main section article .text .text-1 .timer {
   font-weight: bold;
 }
-
 main section article .text .text-1 .timer svg {
   margin-right: 5px;
   margin-top: 3px;
 }
-
 main section article .text .text-2 {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   font-size: 12px;
   font-weight: bold;
 }
-
 main section article .text .text-2 .ingredients {
   width: 50%;
   margin-right: 5px;
 }
-
 main section article .text .text-2 .infos {
   width: 50%;
   margin-left: 5px;
@@ -205,5 +161,4 @@ main section article .text .text-2 .infos {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 12px;
-}
-/*# sourceMappingURL=style.css.map */
+}/*# sourceMappingURL=style.css.map */

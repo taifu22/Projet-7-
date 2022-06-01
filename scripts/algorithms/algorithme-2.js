@@ -30,6 +30,8 @@ class Algorithme {
         this.check = null;
         //variable qui me stocke l'erreur si on a pas de recettes a afficher
         this.errorRecipes = document.querySelector('.error-recipes');
+        //variable qui me stocke l'erreur si on a pas tapé plu de 3 carachteres au niveau de la search-bar
+        this.errorSearchBar = document.querySelector('.error-search-bar');
     }
 
    //METHODE POUR TRIER MES 3 MENU ELEMENTS, INGREDIENTS APPLIANCES ET USTENSILS, PAR RAPPORT A LA VALUE DE L'INPUT DE MA RESEARCH-BAR
@@ -60,14 +62,21 @@ class Algorithme {
     getRecipesBarSearch(mapIngredients, arrayTags2Ingredients, mapAppareils, arrayTags2Appliances, mapUstensils, arrayTags2Ustensils) {
         //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
         let check1 = null;
-        document.querySelector(".form-control").addEventListener("input", function () {
-            check1 = this.value.toLowerCase();
+        document.querySelector(".form-control").addEventListener("input", (e)=> {
+            //je fais une condition pour afficher un erreur, et pas déclancher la recherche si l'user ne rentre pas au moins 3 caractères dans search-bar
+            if (e.target.value.length > 3 || e.target.value === "") {
+              check1 = e.target.value.toLowerCase();  
+              this.errorSearchBar.style.display = 'none';
+            } else {
+              this.errorSearchBar.style.display = 'block';
+            } 
         });
         //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer/afficher juste les recettes
         //dont le name est = à la value check de mon input
         const formulaire = document.querySelector(".formulaire");
         formulaire.addEventListener("submit", (e) => {
             e.preventDefault();
+            this.searchingCriterias = [];
             this.errorRecipes.style.display = 'none';
             this.recipesSection.innerHTML = "";
             this.arraySearchTags = [];
@@ -93,10 +102,15 @@ class Algorithme {
                             //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va afficher
                             this.getSortElementsInput(this.cardsRecipes[r].ingredients, this.cardsRecipes[r].appliance, this.cardsRecipes[r].ustensils, this.cardsRecipes[r].name);
                         }
+                        //enfin si ma barre de recherche est vide, donc input vide, je charcge tout mon contenu des 3 menus
+                        else if (this.check === "") {
+                          this.recipesSection.appendChild(this.arrayRecipes[i]);
+                          this.searchingCriterias = [];
+                        }
                         for (let u = 0; u < this.cardsRecipes[r].ingredients.length; u++) {
                             let card = this.cardsRecipes[r].ingredients;
                             //ici c'et la condition pour la recherche/affichage des recettes selon un ingredient
-                        /*else*/ if (card[u].ingredient.toLowerCase().indexOf(check1)!== -1 && this.arrayRecipes[i].id.toLowerCase() === this.cardsRecipes[r].name.toLowerCase()) {
+                            if (card[u].ingredient.toLowerCase().indexOf(check1)!== -1 && this.arrayRecipes[i].id.toLowerCase() === this.cardsRecipes[r].name.toLowerCase()) {
                                 console.log('ingredients');
                                 this.recipesSection.appendChild(this.arrayRecipes[i]);
                                 //j'appelle la methode pour trier les 3 menus ingredient, appliance et ustensils selon les recettes qu'on va affiche

@@ -60,14 +60,9 @@ class Algorithme {
     getRecipesBarSearch(mapIngredients, arrayTags2Ingredients, mapAppareils, arrayTags2Appliances, mapUstensils, arrayTags2Ustensils) {
         //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
         let check1 = null;
-        // document.querySelector(".form-control").addEventListener("input", function () {
-        //   if (this.value.length > 3) {
-        //     check1 = this.value.toLowerCase();  
-        //   } else {
-        //     console.log('veuillez rentrer au moins 3 carachteres');
-        //   }  
-          
-        // });
+        document.querySelector(".form-control").addEventListener("input", function () {
+            check1 = this.value.toLowerCase();  
+        });
         //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer/afficher juste les recettes
         //dont le name est = à la value check de mon input
         const formulaire = document.querySelector(".formulaire");
