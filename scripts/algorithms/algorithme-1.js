@@ -30,6 +30,8 @@ class Algorithme {
         this.check = null;
         //variable qui me stocke l'erreur si on a pas de recettes a afficher
         this.errorRecipes = document.querySelector('.error-recipes');
+        //variable qui me stocke l'erreur si l'user ne rentre pas au moins 3 caractères dans la search-bar
+        this.errorSearchBar = document.querySelector('.error-search-bar');
     }
 
    //METHODE POUR TRIER MES 3 MENU ELEMENTS, INGREDIENTS APPLIANCES ET USTENSILS, PAR RAPPORT A LA VALUE DE L'INPUT DE MA RESEARCH-BAR
@@ -60,14 +62,21 @@ class Algorithme {
     getRecipesBarSearch(mapIngredients, arrayTags2Ingredients, mapAppareils, arrayTags2Appliances, mapUstensils, arrayTags2Ustensils) {
         //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
         let check1 = null;
-        document.querySelector(".form-control").addEventListener("input", function () {
-            check1 = this.value.toLowerCase();
-        });
+        document.querySelector(".form-control").addEventListener("input", (e)=> {
+          //je fais une condition pour afficher un erreur, et pas déclancher la recherche si l'user ne rentre pas au moins 3 caractères dans search-bar
+          if (e.target.value.length > 3 || e.target.value === "") {
+            check1 = e.target.value.toLowerCase();  
+            this.errorSearchBar.style.display = 'none';
+          } else {
+            this.errorSearchBar.style.display = 'block';
+          } 
+      });
         //on recupere l'élément form de mon input pour pouvoir envoyer la requete de mon formulaire, à savoir filtrer/afficher juste les recettes
         //dont le name est = à la value check de mon input
         const formulaire = document.querySelector(".formulaire");
         formulaire.addEventListener("submit", (e) => {
             e.preventDefault();
+            this.searchingCriterias = [];
             this.errorRecipes.style.display = 'none';
             this.recipesSection.innerHTML = "";
             this.arraySearchTags = [];

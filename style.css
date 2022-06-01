@@ -104,6 +104,12 @@ main .error-recipes {
   margin-top: 20px;
   color: red;
 }
+main .error-search-bar {
+  display: none;
+  font-weight: bold;
+  margin-top: 20px;
+  color: red;
+}
 main section {
   margin-top: 20px;
 }
