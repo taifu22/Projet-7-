@@ -71,7 +71,7 @@ class Algorithme {
             /*je fais une condition pour afficher la liste des recettes selon la value que rentre l'user dans l'input de la barre de recherche(search-bar).
             La recherche est instantanée, et l'user doit rentrer au moins 3 carachteres.
             Par contre (else) j'affiche un erreur, et la recherche n'est pas déclenchée, si l'user ne rentre pas au moins 3 caractères dans search-bar*/
-            if (e.target.value.length > 3 || e.target.value === "") {
+            if (e.target.value.length >= 3 || e.target.value === "") {
               check1 = e.target.value.toLowerCase();  
               this.errorSearchBar.style.display = 'none';
               this.searchingCriterias = [];

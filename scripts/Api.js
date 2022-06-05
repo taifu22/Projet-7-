@@ -9,5 +9,5 @@ class RecipesApi {
         .then((res) => res)
         .catch((err) => console.log("an error occurs", err)); 
     }
-  }
+}
    
