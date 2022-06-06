@@ -59,7 +59,7 @@ class Algorithme {
   }
 
   //METHODE POUR LA RECHERCHE DES RECETTES PAR TITRE, INGREDIENT OU DESCRIPTION DANS LA BARRE DE RECHERCHE PRINCIPALE
-  getRecipesBarSearch(mapIngredients, arrayTags2Ingredients, mapAppareils,arrayTags2Appliances,mapUstensils, arrayTags ) {
+  getRecipesBarSearch(mapIngredients, arrayTags2Ingredients, mapAppareils,arrayTags2Appliances,mapUstensils, arrayTags2Ustensils ) {
     //on recupere l'élément form de mon input pour pouvoir faire un preventdefault et supprimer le submit du formulaire quand on tape sur la touche entrée
     const formulaire = document.querySelector(".formulaire");
     formulaire.addEventListener("submit", (e) => {
