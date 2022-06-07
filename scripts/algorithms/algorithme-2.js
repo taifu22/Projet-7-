@@ -63,7 +63,7 @@ class Algorithme {
     //on recupere l'élément form de mon input pour pouvoir faire un preventdefault et supprimer le submit du formulaire quand on tape sur la touche entrée
     const formulaire = document.querySelector(".formulaire");
     formulaire.addEventListener("submit", (e) => {
-      e.preventDefault();
+      e.preventDefault(); 
     });
     //on recupere la value de notre input de la barre de recherche et on la stocke dans la variable check
     let check1 = null;
